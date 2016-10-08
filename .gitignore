@@ -27,3 +27,9 @@
 *.exe
 *.out
 *.app
+
+# IDEs
+.vscode/
+
+# OS files
+.DS_Store
