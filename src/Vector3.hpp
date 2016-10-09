@@ -81,6 +81,14 @@ struct Vector3
     static double Angle(Vector3 a, Vector3 b);
 
     /**
+     * Returns the component of a in the direction of b (scalar projection).
+     * @param a: The target vector.
+     * @param b: The vector being compared against.
+     * @return: A scalar value.
+     */
+    static double Component(Vector3 a, Vector3 b);
+
+    /**
      * Returns the cross product of two vectors.
      * @param lhs: The left side of the multiplication.
      * @param rhs: The right side of the multiplication.
@@ -133,6 +141,14 @@ struct Vector3
      * @return: A new vector.
      */
     static Vector3 Normalized(Vector3 v);
+
+    /**
+     * Returns the vector projection of a onto b.
+     * @param a: The target vector.
+     * @param b: The vector being projected onto.
+     * @return: A new vector.
+     */
+    static Vector3 Project(Vector3 a, Vector3 b);
 
     /**
      * Multiplies two vectors component-wise.
@@ -205,6 +221,11 @@ double Vector3::Angle(Vector3 a, Vector3 b)
     return acos(Dot(a, b) / (Magnitude(a) * Magnitude(b)));
 }
 
+double Vector3::Component(Vector3 a, Vector3 b)
+{
+    return Dot(a, b) / Magnitude(b);
+}
+
 Vector3 Vector3::Cross(Vector3 lhs, Vector3 rhs)
 {
     double x = lhs.Y * rhs.Z - lhs.Z * rhs.Y;
@@ -247,6 +268,12 @@ double Vector3::Magnitude(Vector3 v)
 Vector3 Vector3::Normalized(Vector3 v)
 {
     return v / Magnitude(v);
+}
+
+Vector3 Vector3::Project(Vector3 a, Vector3 b)
+{
+    double m = Magnitude(b);
+    return Dot(a, b) / (m * m) * b;
 }
 
 Vector3 Vector3::Scale(Vector3 a, Vector3 b)

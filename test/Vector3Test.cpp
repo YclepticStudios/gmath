@@ -219,6 +219,22 @@ TEST_CASE("Angle between vectors", "[Vector3]")
     CHECK(Vector3::Angle(v1, v2) == Approx(2.91024));
 }
 
+TEST_CASE("Component of a along b", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    CHECK(Vector3::Component(v1, v2) == Approx(-2.9417420271));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    CHECK(Vector3::Component(v1, v2) == Approx(0.10658));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    CHECK(Vector3::Component(v1, v2) == Approx(-179.9710189279));
+}
+
 TEST_CASE("Cross product of vectors", "[Vector3]")
 {
     // Case 1
@@ -364,6 +380,31 @@ TEST_CASE("Normalized vector", "[Vector3]")
     CHECK(n.X == Approx(-0.146027));
     CHECK(n.Y == Approx(0.448898));
     CHECK(n.Z == Approx(-0.881571));
+}
+
+TEST_CASE("Vector projection of a on b", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v = Vector3::Project(v1, v2);
+    CHECK(v.X == Approx(-1.7307692308));
+    CHECK(v.Y == Approx(-0.5769230769));
+    CHECK(v.Z == Approx(2.3076923077));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v = Vector3::Project(v1, v2);
+    CHECK(v.X == Approx(0.03487));
+    CHECK(v.Y == Approx(-0.0035));
+    CHECK(v.Z == Approx(-0.10065));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    v = Vector3::Project(v1, v2);
+    CHECK(v.X == Approx(-23.6439377797));
+    CHECK(v.Y == Approx(42.0336671639));
+    CHECK(v.Z == Approx(-173.3888770509));
 }
 
 TEST_CASE("Scale vector", "[Vector3]")
