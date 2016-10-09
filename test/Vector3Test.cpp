@@ -205,3 +205,16 @@ TEST_CASE("Normalized vector", "[Vector3]")
     CHECK(n.Y == Approx(0.448898));
     CHECK(n.Z == Approx(-0.881571));
 }
+
+TEST_CASE("Square magnitude of a vector", "[Vector3]")
+{
+    // Vector 1
+    Vector3 v = Vector3(2, -5, 4);
+    CHECK(Vector3::SqrMagnitude(v) == Approx(45));
+    // Vector 2
+    v = Vector3(0.24, 0.0082, -0.03);
+    CHECK(Vector3::SqrMagnitude(v) == Approx(0.05856738));
+    // Vector 3
+    v = Vector3(-27, 83, -163);
+    CHECK(Vector3::SqrMagnitude(v) == Approx(34187));
+}

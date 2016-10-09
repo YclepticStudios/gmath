@@ -86,6 +86,16 @@ struct Vector3
      */
     static Vector3 Normalized(Vector3 v);
 
+    /**
+     * Returns the squared magnitude of a vector.
+     * This is usefull when comparing relative lengths, where the exact length
+     * is not important, and much time can be saved by not calculating the sqare
+     * root.
+     * @param v: The vector in question.
+     * @return: A scalar value.
+     */
+    static double SqrMagnitude(Vector3 v);
+
 
     /**
      * Operator overloading.
@@ -134,12 +144,17 @@ Vector3::Vector3(double x, double y, double z) : X(x), Y(y), Z(z) {}
 
 double Vector3::Magnitude(Vector3 v)
 {
-    return sqrt(v.X * v.X + v.Y * v.Y + v.Z * v.Z);
+    return sqrt(SqrMagnitude(v));
 }
 
 Vector3 Vector3::Normalized(Vector3 v)
 {
     return v / Magnitude(v);
+}
+
+double Vector3::SqrMagnitude(Vector3 v)
+{
+    return v.X * v.X + v.Y * v.Y + v.Z * v.Z;
 }
 
 
