@@ -48,6 +48,7 @@ struct Vector3
         double data[3];
     };
 
+
     /**
      * Static constants.
      */
@@ -60,6 +61,7 @@ struct Vector3
     static const Vector3 Forward;
     static const Vector3 Backward;
 
+
     /**
      * Constructors.
      */
@@ -68,7 +70,44 @@ struct Vector3
     Vector3(double value);
     Vector3(double x, double y);
     Vector3(double x, double y, double z);
+
+
+    /**
+     * Returns the magnitude of a vector.
+     * @param v: The vector in question.
+     * @return: A scalar value.
+     */
+    static double Magnitude(Vector3 v);
+
+    /**
+     * Returns a new vector with magnitude of one.
+     * @param v: The vector in question.
+     * @return: A new vector.
+     */
+    static Vector3 Normalized(Vector3 v);
+
+
+    /**
+     * Operator overloading.
+     */
+    struct Vector3& operator+=(const double& rhs);
+    struct Vector3& operator-=(const double& rhs);
+    struct Vector3& operator*=(const double& rhs);
+    struct Vector3& operator/=(const double& rhs);
+    struct Vector3& operator+=(const Vector3& rhs);
+    struct Vector3& operator-=(const Vector3& rhs);
 };
+
+Vector3 operator+(Vector3 lhs, const double rhs);
+Vector3 operator-(Vector3 lhs, const double rhs);
+Vector3 operator*(Vector3 lhs, const double rhs);
+Vector3 operator/(Vector3 lhs, const double rhs);
+Vector3 operator+(const double lhs, Vector3 rhs);
+Vector3 operator-(const double lhs, Vector3 rhs);
+Vector3 operator*(const double lhs, Vector3 rhs);
+Vector3 operator/(const double lhs, Vector3 rhs);
+Vector3 operator+(Vector3 lhs, const Vector3 &rhs);
+Vector3 operator-(Vector3 lhs, const Vector3 &rhs);
 
 
 
@@ -86,37 +125,79 @@ const Vector3 Vector3::Forward = Vector3(0, 0, 1);
 const Vector3 Vector3::Backward = Vector3(0, 0, -1);
 
 
-Vector3::Vector3()
+Vector3::Vector3() : X(0), Y(0), Z(0) {}
+Vector3::Vector3(double data[]) : X(data[0]), Y(data[1]), Z(data[2]) {}
+Vector3::Vector3(double value) : X(value), Y(value), Z(value) {}
+Vector3::Vector3(double x, double y) : X(x), Y(y), Z(0) {}
+Vector3::Vector3(double x, double y, double z) : X(x), Y(y), Z(z) {}
+
+
+double Vector3::Magnitude(Vector3 v)
 {
-    X = 0;
-    Y = 0;
-    Z = 0;
+    return sqrt(v.X * v.X + v.Y * v.Y + v.Z * v.Z);
 }
 
-Vector3::Vector3(double data[])
+Vector3 Vector3::Normalized(Vector3 v)
 {
-    X = data[0];
-    Y = data[1];
-    Z = data[2];
+    return v / Magnitude(v);
 }
 
-Vector3::Vector3(double value)
+
+struct Vector3& Vector3::operator+=(const double &rhs)
 {
-    X = value;
-    Y = value;
-    Z = value;
+    X += rhs;
+    Y += rhs;
+    Z += rhs;
+    return *this;
 }
 
-Vector3::Vector3(double x, double y)
+struct Vector3& Vector3::operator-=(const double &rhs)
 {
-    X = x;
-    Y = y;
-    Z = 0;
+    X -= rhs;
+    Y -= rhs;
+    Z -= rhs;
+    return *this;
 }
 
-Vector3::Vector3(double x, double y, double z)
+struct Vector3& Vector3::operator*=(const double &rhs)
 {
-    X = x;
-    Y = y;
-    X = z;
+    X *= rhs;
+    Y *= rhs;
+    Z *= rhs;
+    return *this;
 }
+
+struct Vector3& Vector3::operator/=(const double &rhs)
+{
+    X /= rhs;
+    Y /= rhs;
+    Z /= rhs;
+    return *this;
+}
+
+struct Vector3& Vector3::operator+=(const Vector3 &rhs)
+{
+    X += rhs.X;
+    Y += rhs.Y;
+    Z += rhs.Z;
+    return *this;
+}
+
+struct Vector3& Vector3::operator-=(const Vector3 &rhs)
+{
+    X -= rhs.X;
+    Y -= rhs.Y;
+    Z -= rhs.Z;
+    return *this;
+}
+
+Vector3 operator+(Vector3 lhs, const double rhs) { return lhs += rhs; }
+Vector3 operator-(Vector3 lhs, const double rhs) { return lhs -= rhs; }
+Vector3 operator*(Vector3 lhs, const double rhs) { return lhs *= rhs; }
+Vector3 operator/(Vector3 lhs, const double rhs) { return lhs /= rhs; }
+Vector3 operator+(const double lhs, Vector3 rhs) { return rhs += lhs; }
+Vector3 operator-(const double lhs, Vector3 rhs) { return rhs -= lhs; }
+Vector3 operator*(const double lhs, Vector3 rhs) { return rhs *= lhs; }
+Vector3 operator/(const double lhs, Vector3 rhs) { return rhs /= lhs; }
+Vector3 operator+(Vector3 lhs, const Vector3 &rhs) { return lhs += rhs; }
+Vector3 operator-(Vector3 lhs, const Vector3 &rhs) { return lhs -= rhs; }
