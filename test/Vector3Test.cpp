@@ -99,7 +99,7 @@ TEST_CASE("Vector times scalar", "[Vector3]")
     CHECK(v.Z == Approx(-2119));
 }
 
-TEST_CASE("Vector devided by scalar", "[Vector3]")
+TEST_CASE("Vector divided by scalar", "[Vector3]")
 {
     // Vector 1
     Vector3 v = Vector3(2, -5, 4);

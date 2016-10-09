@@ -88,9 +88,9 @@ struct Vector3
 
     /**
      * Returns the squared magnitude of a vector.
-     * This is usefull when comparing relative lengths, where the exact length
-     * is not important, and much time can be saved by not calculating the sqare
-     * root.
+     * This is useful when comparing relative lengths, where the exact length
+     * is not important, and much time can be saved by not calculating the
+     * square root.
      * @param v: The vector in question.
      * @return: A scalar value.
      */
