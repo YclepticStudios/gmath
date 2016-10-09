@@ -35,19 +35,19 @@
 
 TEST_CASE("Vector plus scalar", "[Vector3]")
 {
-    // Vector 1
+    // Case 1
     Vector3 v = Vector3(2, -5, 4);
     v = v + 3;
     CHECK(v.X == Approx(5));
     CHECK(v.Y == Approx(-2));
     CHECK(v.Z == Approx(7));
-    // Vector 2
+    // Case 2
     v = Vector3(0.24, 0.0082, -0.03);
     v = v + 0.2;
     CHECK(v.X == Approx(0.44));
     CHECK(v.Y == Approx(0.2082));
     CHECK(v.Z == Approx(0.17));
-    // Vector 3
+    // Case 3
     v = Vector3(-27, 83, -163);
     v = v + 13;
     CHECK(v.X == Approx(-14));
@@ -57,19 +57,19 @@ TEST_CASE("Vector plus scalar", "[Vector3]")
 
 TEST_CASE("Vector minus scalar", "[Vector3]")
 {
-    // Vector 1
+    // Case 1
     Vector3 v = Vector3(2, -5, 4);
     v = v - 3;
     CHECK(v.X == Approx(-1));
     CHECK(v.Y == Approx(-8));
     CHECK(v.Z == Approx(1));
-    // Vector 2
+    // Case 2
     v = Vector3(0.24, 0.0082, -0.03);
     v = v - 0.2;
     CHECK(v.X == Approx(0.04));
     CHECK(v.Y == Approx(-0.1918));
     CHECK(v.Z == Approx(-0.23));
-    // Vector 3
+    // Case 3
     v = Vector3(-27, 83, -163);
     v = v - 13;
     CHECK(v.X == Approx(-40));
@@ -79,19 +79,19 @@ TEST_CASE("Vector minus scalar", "[Vector3]")
 
 TEST_CASE("Vector times scalar", "[Vector3]")
 {
-    // Vector 1
+    // Case 1
     Vector3 v = Vector3(2, -5, 4);
     v = v * 3;
     CHECK(v.X == Approx(6));
     CHECK(v.Y == Approx(-15));
     CHECK(v.Z == Approx(12));
-    // Vector 2
+    // Case 2
     v = Vector3(0.24, 0.0082, -0.03);
     v = v * 0.2;
     CHECK(v.X == Approx(0.048));
     CHECK(v.Y == Approx(0.00164));
     CHECK(v.Z == Approx(-0.006));
-    // Vector 3
+    // Case 3
     v = Vector3(-27, 83, -163);
     v = v * 13;
     CHECK(v.X == Approx(-351));
@@ -101,19 +101,19 @@ TEST_CASE("Vector times scalar", "[Vector3]")
 
 TEST_CASE("Vector divided by scalar", "[Vector3]")
 {
-    // Vector 1
+    // Case 1
     Vector3 v = Vector3(2, -5, 4);
     v = v / 3;
     CHECK(v.X == Approx(0.66666667));
     CHECK(v.Y == Approx(-1.66666667));
     CHECK(v.Z == Approx(1.33333333));
-    // Vector 2
+    // Case 2
     v = Vector3(0.24, 0.0082, -0.03);
     v = v / 0.2;
     CHECK(v.X == Approx(1.2));
     CHECK(v.Y == Approx(0.041));
     CHECK(v.Z == Approx(-0.15));
-    // Vector 3
+    // Case 3
     v = Vector3(-27, 83, -163);
     v = v / 13;
     CHECK(v.X == Approx(-2.0769231));
@@ -123,21 +123,21 @@ TEST_CASE("Vector divided by scalar", "[Vector3]")
 
 TEST_CASE("Vector plus vector", "[Vector3]")
 {
-    // Vector 1
+    // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
     Vector3 v2 = Vector3(6, 2, -8);
     Vector3 v = v1 + v2;
     CHECK(v.X == Approx(8));
     CHECK(v.Y == Approx(-3));
     CHECK(v.Z == Approx(-4));
-    // Vector 2
+    // Case 2
     v1 = Vector3(0.24, 0.0082, -0.03);
     v2 = Vector3(0.53, -0.0532, -1.53);
     v = v1 + v2;
     CHECK(v.X == Approx(0.77));
     CHECK(v.Y == Approx(-0.045));
     CHECK(v.Z == Approx(-1.56));
-    // Vector 3
+    // Case 3
     v1 = Vector3(-27, 83, -163);
     v2 = Vector3(36, -64, 264);
     v = v1 + v2;
@@ -148,21 +148,21 @@ TEST_CASE("Vector plus vector", "[Vector3]")
 
 TEST_CASE("Vector minus vector", "[Vector3]")
 {
-    // Vector 1
+    // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
     Vector3 v2 = Vector3(6, 2, -8);
     Vector3 v = v1 - v2;
     CHECK(v.X == Approx(-4));
     CHECK(v.Y == Approx(-7));
     CHECK(v.Z == Approx(12));
-    // Vector 2
+    // Case 2
     v1 = Vector3(0.24, 0.0082, -0.03);
     v2 = Vector3(0.53, -0.0532, -1.53);
     v = v1 - v2;
     CHECK(v.X == Approx(-0.29));
     CHECK(v.Y == Approx(0.0614));
     CHECK(v.Z == Approx(1.5));
-    // Vector 3
+    // Case 3
     v1 = Vector3(-27, 83, -163);
     v2 = Vector3(36, -64, 264);
     v = v1 - v2;
@@ -171,34 +171,194 @@ TEST_CASE("Vector minus vector", "[Vector3]")
     CHECK(v.Z == Approx(-427));
 }
 
+TEST_CASE("Vector equality", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    CHECK_FALSE(v1 == v2);
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.24, 0.0082, -0.03);
+    CHECK(v1 == v2);
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(-27, 83, 264);
+    CHECK_FALSE(v1 == v2);
+}
+
+TEST_CASE("Vector inequality", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    CHECK(v1 != v2);
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.24, 0.0082, -0.03);
+    CHECK_FALSE(v1 != v2);
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(-27, 83, 264);
+    CHECK(v1 != v2);
+}
+
+TEST_CASE("Angle between vectors", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    CHECK(Vector3::Angle(v1, v2) == Approx(2.02476));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    CHECK(Vector3::Angle(v1, v2) == Approx(1.11476));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    CHECK(Vector3::Angle(v1, v2) == Approx(2.91024));
+}
+
+TEST_CASE("Cross product of vectors", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v = Vector3::Cross(v1, v2);
+    CHECK(v.X == Approx(32));
+    CHECK(v.Y == Approx(40));
+    CHECK(v.Z == Approx(34));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v = Vector3::Cross(v1, v2);
+    CHECK(v.X == Approx(-0.014142));
+    CHECK(v.Y == Approx(0.3513));
+    CHECK(v.Z == Approx(-0.017114));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    v = Vector3::Cross(v1, v2);
+    CHECK(v.X == Approx(11480));
+    CHECK(v.Y == Approx(1260));
+    CHECK(v.Z == Approx(-1260));
+    // Cross product of vector and itself is zero
+    v = Vector3::Cross(v1, v1);
+    CHECK(v.X == Approx(0));
+    CHECK(v.Y == Approx(0));
+    CHECK(v.Z == Approx(0));
+}
+
+TEST_CASE("Distance between points", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    CHECK(Vector3::Distance(v1, v2) == Approx(14.4568));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    CHECK(Vector3::Distance(v1, v2) == Approx(1.52901));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    CHECK(Vector3::Distance(v1, v2) == Approx(455.968));
+}
+
+TEST_CASE("Dot product of vectors", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    CHECK(Vector3::Dot(v1, v2) == Approx(-30));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    CHECK(Vector3::Dot(v1, v2) == Approx(0.172663));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    CHECK(Vector3::Dot(v1, v2) == Approx(-49316));
+}
+
+TEST_CASE("Max of vectors", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v = Vector3::Max(v1, v2);
+    CHECK(v.X == Approx(6));
+    CHECK(v.Y == Approx(2));
+    CHECK(v.Z == Approx(4));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v = Vector3::Max(v1, v2);
+    CHECK(v.X == Approx(0.53));
+    CHECK(v.Y == Approx(0.0082));
+    CHECK(v.Z == Approx(-0.03));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    v = Vector3::Max(v1, v2);
+    CHECK(v.X == Approx(36));
+    CHECK(v.Y == Approx(83));
+    CHECK(v.Z == Approx(264));
+}
+
+TEST_CASE("Min of vectors", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v = Vector3::Min(v1, v2);
+    CHECK(v.X == Approx(2));
+    CHECK(v.Y == Approx(-5));
+    CHECK(v.Z == Approx(-8));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v = Vector3::Min(v1, v2);
+    CHECK(v.X == Approx(0.24));
+    CHECK(v.Y == Approx(-0.0532));
+    CHECK(v.Z == Approx(-1.53));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    v = Vector3::Min(v1, v2);
+    CHECK(v.X == Approx(-27));
+    CHECK(v.Y == Approx(-64));
+    CHECK(v.Z == Approx(-163));
+}
+
 TEST_CASE("Magnitude of a vector", "[Vector3]")
 {
-    // Vector 1
+    // Case 1
     Vector3 v = Vector3(2, -5, 4);
     CHECK(Vector3::Magnitude(v) == Approx(6.70820393));
-    // Vector 2
+    // Case 2
     v = Vector3(0.24, 0.0082, -0.03);
     CHECK(Vector3::Magnitude(v) == Approx(0.242007));
-    // Vector 3
+    // Case 3
     v = Vector3(-27, 83, -163);
     CHECK(Vector3::Magnitude(v) == Approx(184.897269));
 }
 
 TEST_CASE("Normalized vector", "[Vector3]")
 {
-    // Vector 1
+    // Case 1
     Vector3 v = Vector3(2, -5, 4);
     Vector3 n = Vector3::Normalized(v);
     CHECK(n.X == Approx(0.298142));
     CHECK(n.Y == Approx(-0.745356));
     CHECK(n.Z == Approx(0.596285));
-    // Vector 2
+    // Case 2
     v = Vector3(0.24, 0.0082, -0.03);
     n = Vector3::Normalized(v);
     CHECK(n.X == Approx(0.991708));
     CHECK(n.Y == Approx(0.0338834));
     CHECK(n.Z == Approx(-0.123964));
-    // Vector 3
+    // Case 3
     v = Vector3(-27, 83, -163);
     n = Vector3::Normalized(v);
     CHECK(n.X == Approx(-0.146027));
@@ -206,15 +366,40 @@ TEST_CASE("Normalized vector", "[Vector3]")
     CHECK(n.Z == Approx(-0.881571));
 }
 
+TEST_CASE("Scale vector", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v = Vector3::Scale(v1, v2);
+    CHECK(v.X == Approx(12));
+    CHECK(v.Y == Approx(-10));
+    CHECK(v.Z == Approx(-32));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v = Vector3::Scale(v1, v2);
+    CHECK(v.X == Approx(0.1272));
+    CHECK(v.Y == Approx(-0.00043624));
+    CHECK(v.Z == Approx(0.0459));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    v = Vector3::Scale(v1, v2);
+    CHECK(v.X == Approx(-972));
+    CHECK(v.Y == Approx(-5312));
+    CHECK(v.Z == Approx(-43032));
+}
+
 TEST_CASE("Square magnitude of a vector", "[Vector3]")
 {
-    // Vector 1
+    // Case 1
     Vector3 v = Vector3(2, -5, 4);
     CHECK(Vector3::SqrMagnitude(v) == Approx(45));
-    // Vector 2
+    // Case 2
     v = Vector3(0.24, 0.0082, -0.03);
     CHECK(Vector3::SqrMagnitude(v) == Approx(0.05856738));
-    // Vector 3
+    // Case 3
     v = Vector3(-27, 83, -163);
     CHECK(Vector3::SqrMagnitude(v) == Approx(34187));
 }

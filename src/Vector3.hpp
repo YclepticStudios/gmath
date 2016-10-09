@@ -73,6 +73,54 @@ struct Vector3
 
 
     /**
+     * Returns the angle between two vectors in radians.
+     * @param a: The first vector.
+     * @param b: The second vector.
+     * @return: A scalar value.
+     */
+    static double Angle(Vector3 a, Vector3 b);
+
+    /**
+     * Returns the cross product of two vectors.
+     * @param lhs: The left side of the multiplication.
+     * @param rhs: The right side of the multiplication.
+     * @return: A new vector.
+     */
+    static Vector3 Cross(Vector3 lhs, Vector3 rhs);
+
+    /**
+     * Returns the distance between a and b.
+     * @param a: The first point.
+     * @param b: The second point.
+     * @return: A scalar value.
+     */
+    static double Distance(Vector3 a, Vector3 b);
+
+    /**
+     * Returns the dot product of two vectors.
+     * @param lhs: The left side of the multiplication.
+     * @param rhs: The right side of the multiplication.
+     * @return: A scalar value.
+     */
+    static double Dot(Vector3 lhs, Vector3 rhs);
+
+    /**
+     * Returns a vector made from the largest components of two other vectors.
+     * @param a: The first vector.
+     * @param b: The second vector.
+     * @return: A new vector.
+     */
+    static Vector3 Max(Vector3 a, Vector3 b);
+
+    /**
+     * Returns a vector made from the smallest components of two other vectors.
+     * @param a: The first vector.
+     * @param b: The second vector.
+     * @return: A new vector.
+     */
+    static Vector3 Min(Vector3 a, Vector3 b);
+
+    /**
      * Returns the magnitude of a vector.
      * @param v: The vector in question.
      * @return: A scalar value.
@@ -85,6 +133,14 @@ struct Vector3
      * @return: A new vector.
      */
     static Vector3 Normalized(Vector3 v);
+
+    /**
+     * Multiplies two vectors component-wise.
+     * @param a: The lhs of the multiplication.
+     * @param b: The rhs of the multiplication.
+     * @return: A new vector.
+     */
+    static Vector3 Scale(Vector3 a, Vector3 b);
 
     /**
      * Returns the squared magnitude of a vector.
@@ -118,6 +174,8 @@ Vector3 operator*(const double lhs, Vector3 rhs);
 Vector3 operator/(const double lhs, Vector3 rhs);
 Vector3 operator+(Vector3 lhs, const Vector3 &rhs);
 Vector3 operator-(Vector3 lhs, const Vector3 &rhs);
+bool operator==(const Vector3 &lhs, const Vector3 &rhs);
+bool operator!=(const Vector3 &lhs, const Vector3 &rhs);
 
 
 
@@ -142,6 +200,45 @@ Vector3::Vector3(double x, double y) : X(x), Y(y), Z(0) {}
 Vector3::Vector3(double x, double y, double z) : X(x), Y(y), Z(z) {}
 
 
+double Vector3::Angle(Vector3 a, Vector3 b)
+{
+    return acos(Dot(a, b) / (Magnitude(a) * Magnitude(b)));
+}
+
+Vector3 Vector3::Cross(Vector3 lhs, Vector3 rhs)
+{
+    double x = lhs.Y * rhs.Z - lhs.Z * rhs.Y;
+    double y = lhs.Z * rhs.X - lhs.X * rhs.Z;
+    double z = lhs.X * rhs.Y - lhs.Y * rhs.X;
+    return Vector3(x, y, z);
+}
+
+double Vector3::Distance(Vector3 a, Vector3 b)
+{
+    return Vector3::Magnitude(a - b);
+}
+
+double Vector3::Dot(Vector3 lhs, Vector3 rhs)
+{
+    return lhs.X * rhs.X + lhs.Y * rhs.Y + lhs.Z * rhs.Z;
+}
+
+Vector3 Vector3::Max(Vector3 a, Vector3 b)
+{
+    double x = a.X > b.X ? a.X : b.X;
+    double y = a.Y > b.Y ? a.Y : b.Y;
+    double z = a.Z > b.Z ? a.Z : b.Z;
+    return Vector3(x, y, z);
+}
+
+Vector3 Vector3::Min(Vector3 a, Vector3 b)
+{
+    double x = a.X > b.X ? b.X : a.X;
+    double y = a.Y > b.Y ? b.Y : a.Y;
+    double z = a.Z > b.Z ? b.Z : a.Z;
+    return Vector3(x, y, z);
+}
+
 double Vector3::Magnitude(Vector3 v)
 {
     return sqrt(SqrMagnitude(v));
@@ -150,6 +247,11 @@ double Vector3::Magnitude(Vector3 v)
 Vector3 Vector3::Normalized(Vector3 v)
 {
     return v / Magnitude(v);
+}
+
+Vector3 Vector3::Scale(Vector3 a, Vector3 b)
+{
+    return Vector3(a.X * b.X, a.Y * b.Y, a.Z * b.Z);
 }
 
 double Vector3::SqrMagnitude(Vector3 v)
@@ -216,3 +318,13 @@ Vector3 operator*(const double lhs, Vector3 rhs) { return rhs *= lhs; }
 Vector3 operator/(const double lhs, Vector3 rhs) { return rhs /= lhs; }
 Vector3 operator+(Vector3 lhs, const Vector3 &rhs) { return lhs += rhs; }
 Vector3 operator-(Vector3 lhs, const Vector3 &rhs) { return lhs -= rhs; }
+
+bool operator==(const Vector3 &lhs, const Vector3 &rhs)
+{
+    return lhs.X == rhs.X && lhs.Y == rhs.Y && lhs.Z == rhs.Z;
+}
+
+bool operator!=(const Vector3 &lhs, const Vector3 &rhs)
+{
+    return !(lhs == rhs);
+}
