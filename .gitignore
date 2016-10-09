@@ -28,6 +28,10 @@
 *.out
 *.app
 
+# Output directories
+bin/
+build/
+
 # IDEs
 .vscode/
 

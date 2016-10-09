@@ -7,7 +7,7 @@ INCLUDES = src \
 # Files
 SOURCES = $(wildcard test/*.cpp)
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(SOURCES:.cpp=.o)))
-EXECUTABLE = $(BIN_DIR)/GMathTest
+EXECUTABLE = $(BIN_DIR)/GMathTest.app
 # Flags
 CFLAGS = $(addprefix -I , $(INCLUDES))
 LDFLAGS =
