@@ -16,14 +16,14 @@ LDFLAGS =
 $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(LDFLAGS) $^ -o $@
 
-$(BUILD_DIR)/%.o : $(SRC_DIR)/%.cpp $(BUILD_DIR) $(BIN_DIR)
+$(BUILD_DIR)/%.o : $(SRC_DIR)/%.cpp | $(BUILD_DIR) $(BIN_DIR)
 	$(CXX) $(CFLAGS) -c $< -o $@
 
 $(BUILD_DIR):
-	mkdir $(BUILD_DIR)
+	mkdir $@
 
 $(BIN_DIR):
-	mkdir $(BIN_DIR)
+	mkdir $@
 
 .PHONY: clean
 clean:
