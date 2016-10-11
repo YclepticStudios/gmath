@@ -81,6 +81,14 @@ struct Vector3
     static double Angle(Vector3 a, Vector3 b);
 
     /**
+     * Returns a vector with its magnitude clamped to maxLength.
+     * @param vector: The target vector.
+     * @param maxLength: The maximum length of the return vector.
+     * @return: A new vector.
+     */
+    static Vector3 ClampMagnitude(Vector3 vector, double maxLength);
+
+    /**
      * Returns the component of a in the direction of b (scalar projection).
      * @param a: The target vector.
      * @param b: The vector being compared against.
@@ -111,6 +119,15 @@ struct Vector3
      * @return: A scalar value.
      */
     static double Dot(Vector3 lhs, Vector3 rhs);
+
+    /**
+     * Returns a vector linearly interpolated between a and b, moving along
+     * a strait ling. The vector is clamped to never go beyond the end points.
+     * @param a: The starting point.
+     * @param b: The ending point.
+     * @param t: The interpolation value [0-1].
+     */
+    static Vector3 Lerp(Vector3 a, Vector3 b, double t);
 
     /**
      * Returns a vector made from the largest components of two other vectors.
@@ -221,6 +238,14 @@ double Vector3::Angle(Vector3 a, Vector3 b)
     return acos(Dot(a, b) / (Magnitude(a) * Magnitude(b)));
 }
 
+Vector3 Vector3::ClampMagnitude(Vector3 vector, double maxLength)
+{
+    double length = Magnitude(vector);
+    if (length > maxLength)
+        vector *= maxLength / length;
+    return vector;
+}
+
 double Vector3::Component(Vector3 a, Vector3 b)
 {
     return Dot(a, b) / Magnitude(b);
@@ -242,6 +267,13 @@ double Vector3::Distance(Vector3 a, Vector3 b)
 double Vector3::Dot(Vector3 lhs, Vector3 rhs)
 {
     return lhs.X * rhs.X + lhs.Y * rhs.Y + lhs.Z * rhs.Z;
+}
+
+Vector3 Vector3::Lerp(Vector3 a, Vector3 b, double t)
+{
+    if (t < 0) t = 0;
+    else if (t > 1) t = 1;
+    return (b - a) * t + a;
 }
 
 Vector3 Vector3::Max(Vector3 a, Vector3 b)

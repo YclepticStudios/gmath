@@ -219,6 +219,28 @@ TEST_CASE("Angle between vectors", "[Vector3]")
     CHECK(Vector3::Angle(v1, v2) == Approx(2.91024));
 }
 
+TEST_CASE("Clamp magnitude of vector", "[Vector3]")
+{
+    // Case 1
+    Vector3 v = Vector3(2, -5, 4);
+    v = Vector3::ClampMagnitude(v, 7);
+    CHECK(v.X == Approx(2));
+    CHECK(v.Y == Approx(-5));
+    CHECK(v.Z == Approx(4));
+    // Case 2
+    v = Vector3(0.24, 0.0082, -0.03);
+    v = Vector3::ClampMagnitude(v, 0.2);
+    CHECK(v.X == Approx(0.198341621));
+    CHECK(v.Y == Approx(0.00677667205));
+    CHECK(v.Z == Approx(-0.02479270262));
+    // Case 3
+    v = Vector3(-27, 83, -163);
+    v = Vector3::ClampMagnitude(v, 100);
+    CHECK(v.X == Approx(-14.6027035332));
+    CHECK(v.Y == Approx(44.8897923428));
+    CHECK(v.Z == Approx(-88.1570620707));
+}
+
 TEST_CASE("Component of a along b", "[Vector3]")
 {
     // Case 1
@@ -295,6 +317,31 @@ TEST_CASE("Dot product of vectors", "[Vector3]")
     v1 = Vector3(-27, 83, -163);
     v2 = Vector3(36, -64, 264);
     CHECK(Vector3::Dot(v1, v2) == Approx(-49316));
+}
+
+TEST_CASE("Lerp two vectors", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v = Vector3::Lerp(v1, v2, -0.2);
+    CHECK(v.X == Approx(2));
+    CHECK(v.Y == Approx(-5));
+    CHECK(v.Z == Approx(4));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v = Vector3::Lerp(v1, v2, 0.33);
+    CHECK(v.X == Approx(0.3357));
+    CHECK(v.Y == Approx(-0.012062));
+    CHECK(v.Z == Approx(-0.525));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    v = Vector3::Lerp(v1, v2, 1.7);
+    CHECK(v.X == Approx(36));
+    CHECK(v.Y == Approx(-64));
+    CHECK(v.Z == Approx(264));
 }
 
 TEST_CASE("Max of vectors", "[Vector3]")
