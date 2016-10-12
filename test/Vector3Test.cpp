@@ -504,6 +504,63 @@ TEST_CASE("Vector projection of a on b", "[Vector3]")
     CHECK(v.Z == Approx(-173.3888770509));
 }
 
+TEST_CASE("Vector projection on plane", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v = Vector3::ProjectOnPlane(v1, v2);
+    CHECK(v.X == Approx(3.7307692308));
+    CHECK(v.Y == Approx(-4.4230769231));
+    CHECK(v.Z == Approx(1.6923076923));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v = Vector3::ProjectOnPlane(v1, v2);
+    CHECK(v.X == Approx(0.2051334533));
+    CHECK(v.Y == Approx(0.0116998119));
+    CHECK(v.Z == Approx(0.0706524838));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    v = Vector3::ProjectOnPlane(v1, v2);
+    CHECK(v.X == Approx(-3.3560622203));
+    CHECK(v.Y == Approx(40.9663328361));
+    CHECK(v.Z == Approx(10.3888770509));
+}
+
+TEST_CASE("Vector reflect off plane", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v = Vector3::Reflect(v1, v2);
+    CHECK(v.X == Approx(5.4615384615));
+    CHECK(v.Y == Approx(-3.8461538462));
+    CHECK(v.Z == Approx(-0.6153846154));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v = Vector3::Reflect(v1, v2);
+    CHECK(v.X == Approx(0.1702669066));
+    CHECK(v.Y == Approx(0.0151996237));
+    CHECK(v.Z == Approx(0.1713049677));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    v = Vector3::Reflect(v1, v2);
+    CHECK(v.X == Approx(20.2878755593));
+    CHECK(v.Y == Approx(-1.0673343277));
+    CHECK(v.Z == Approx(183.7777541019));
+    // Case 4
+    v1 = Vector3(1, 2, 3);
+    v2 = Vector3(0, 1, 0);
+    v = Vector3::Reflect(v1, v2);
+    CHECK(v.X == Approx(1));
+    CHECK(v.Y == Approx(-2));
+    CHECK(v.Z == Approx(3));
+}
+
 TEST_CASE("Scale vector", "[Vector3]")
 {
     // Case 1

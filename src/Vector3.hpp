@@ -190,6 +190,27 @@ struct Vector3
     static Vector3 Project(Vector3 a, Vector3 b);
 
     /**
+     * Returns a vector projected onto a plane orthogonal to "planeNormal".
+     * This can be visualized as the shadow of the vector onto the plane, if
+     * the light source were in the direction of the plane normal.
+     * @param vector: The vector to project.
+     * @param planeNormal: The normal of the plane onto which to project.
+     * @param: A new vector.
+     */
+    static Vector3 ProjectOnPlane(Vector3 vector, Vector3 planeNormal);
+
+    /**
+     * Returns a vector reflected off the plane orthogonal to the normal.
+     * The input vector is pointed inward, at the plane, and the return vector
+     * is pointed outward from the plane, like a beam of light hitting and then
+     * reflecting off a mirror.
+     * @param vector: The vector traveling inward at the plane.
+     * @param planeNormal: The normal of the plane off of which to reflect.
+     * @return: A new vector pointing outward from the plane.
+     */
+    static Vector3 Reflect(Vector3 vector, Vector3 planeNormal);
+
+    /**
      * Multiplies two vectors component-wise.
      * @param a: The lhs of the multiplication.
      * @param b: The rhs of the multiplication.
@@ -343,6 +364,16 @@ Vector3 Vector3::Project(Vector3 a, Vector3 b)
 {
     double m = Magnitude(b);
     return Dot(a, b) / (m * m) * b;
+}
+
+Vector3 Vector3::ProjectOnPlane(Vector3 vector, Vector3 planeNormal)
+{
+    return vector - Project(vector, planeNormal);
+}
+
+Vector3 Vector3::Reflect(Vector3 vector, Vector3 planeNormal)
+{
+    return vector - 2 * Project(vector, planeNormal);
 }
 
 Vector3 Vector3::Scale(Vector3 a, Vector3 b)
