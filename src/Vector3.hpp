@@ -122,12 +122,30 @@ struct Vector3
 
     /**
      * Returns a vector linearly interpolated between a and b, moving along
-     * a strait ling. The vector is clamped to never go beyond the end points.
+     * a straight line. The vector is clamped to never go beyond the end points.
      * @param a: The starting point.
      * @param b: The ending point.
      * @param t: The interpolation value [0-1].
+     * @return: A new vector.
      */
     static Vector3 Lerp(Vector3 a, Vector3 b, double t);
+
+    /**
+     * Returns a vector linearly interpolated between a and b, moving along
+     * a straight line.
+     * @param a: The starting point.
+     * @param b: The ending point.
+     * @param t: The interpolation value [0-1] (no actual bounds).
+     * @return: A new vector.
+     */
+    static Vector3 LerpUnclamped(Vector3 a, Vector3 b, double t);
+
+    /**
+     * Returns the magnitude of a vector.
+     * @param v: The vector in question.
+     * @return: A scalar value.
+     */
+    static double Magnitude(Vector3 v);
 
     /**
      * Returns a vector made from the largest components of two other vectors.
@@ -146,11 +164,15 @@ struct Vector3
     static Vector3 Min(Vector3 a, Vector3 b);
 
     /**
-     * Returns the magnitude of a vector.
-     * @param v: The vector in question.
-     * @return: A scalar value.
+     * Returns a vector "maxDistanceDelta" units closer to the target. This
+     * interpolation is in a straight line, and will not overshoot.
+     * @param current: The current position.
+     * @param target: The destination position.
+     * @param maxDistanceDelta: The maximum distance to move.
+     * @return: A new vector.
      */
-    static double Magnitude(Vector3 v);
+    static Vector3 MoveTowards(Vector3 current, Vector3 target,
+                               double maxDistanceDelta);
 
     /**
      * Returns a new vector with magnitude of one.
@@ -273,7 +295,17 @@ Vector3 Vector3::Lerp(Vector3 a, Vector3 b, double t)
 {
     if (t < 0) t = 0;
     else if (t > 1) t = 1;
+    return LerpUnclamped(a, b, t);
+}
+
+Vector3 Vector3::LerpUnclamped(Vector3 a, Vector3 b, double t)
+{
     return (b - a) * t + a;
+}
+
+double Vector3::Magnitude(Vector3 v)
+{
+    return sqrt(SqrMagnitude(v));
 }
 
 Vector3 Vector3::Max(Vector3 a, Vector3 b)
@@ -292,9 +324,14 @@ Vector3 Vector3::Min(Vector3 a, Vector3 b)
     return Vector3(x, y, z);
 }
 
-double Vector3::Magnitude(Vector3 v)
+Vector3 Vector3::MoveTowards(Vector3 current, Vector3 target,
+                             double maxDistanceDelta)
 {
-    return sqrt(SqrMagnitude(v));
+    Vector3 d = target - current;
+    double m = Magnitude(d);
+    if (m < maxDistanceDelta || m == 0)
+        return target;
+    return current + (d * maxDistanceDelta / m);
 }
 
 Vector3 Vector3::Normalized(Vector3 v)

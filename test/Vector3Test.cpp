@@ -344,6 +344,44 @@ TEST_CASE("Lerp two vectors", "[Vector3]")
     CHECK(v.Z == Approx(264));
 }
 
+TEST_CASE("Lerp two vectors without clamping", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v = Vector3::LerpUnclamped(v1, v2, -0.2);
+    CHECK(v.X == Approx(1.2));
+    CHECK(v.Y == Approx(-6.4));
+    CHECK(v.Z == Approx(6.4));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v = Vector3::LerpUnclamped(v1, v2, 0.33);
+    CHECK(v.X == Approx(0.3357));
+    CHECK(v.Y == Approx(-0.012062));
+    CHECK(v.Z == Approx(-0.525));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    v = Vector3::LerpUnclamped(v1, v2, 1.7);
+    CHECK(v.X == Approx(80.1));
+    CHECK(v.Y == Approx(-166.9));
+    CHECK(v.Z == Approx(562.9));
+}
+
+TEST_CASE("Magnitude of a vector", "[Vector3]")
+{
+    // Case 1
+    Vector3 v = Vector3(2, -5, 4);
+    CHECK(Vector3::Magnitude(v) == Approx(6.70820393));
+    // Case 2
+    v = Vector3(0.24, 0.0082, -0.03);
+    CHECK(Vector3::Magnitude(v) == Approx(0.242007));
+    // Case 3
+    v = Vector3(-27, 83, -163);
+    CHECK(Vector3::Magnitude(v) == Approx(184.897269));
+}
+
 TEST_CASE("Max of vectors", "[Vector3]")
 {
     // Case 1
@@ -394,17 +432,29 @@ TEST_CASE("Min of vectors", "[Vector3]")
     CHECK(v.Z == Approx(-163));
 }
 
-TEST_CASE("Magnitude of a vector", "[Vector3]")
+TEST_CASE("Move towards", "[Vector3]")
 {
     // Case 1
-    Vector3 v = Vector3(2, -5, 4);
-    CHECK(Vector3::Magnitude(v) == Approx(6.70820393));
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v = Vector3::MoveTowards(v1, v2, 1.7);
+    CHECK(v.X == Approx(2.4703658354));
+    CHECK(v.Y == Approx(-4.176859788));
+    CHECK(v.Z == Approx(2.5889024937));
     // Case 2
-    v = Vector3(0.24, 0.0082, -0.03);
-    CHECK(Vector3::Magnitude(v) == Approx(0.242007));
-    // Case 3
-    v = Vector3(-27, 83, -163);
-    CHECK(Vector3::Magnitude(v) == Approx(184.897269));
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v = Vector3::MoveTowards(v1, v2, 2);
+    CHECK(v.X == Approx(0.53));
+    CHECK(v.Y == Approx(-0.0532));
+    CHECK(v.Z == Approx(-1.53));
+    // Case 3 (already at point)
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(-27, 83, -163);
+    v = Vector3::MoveTowards(v1, v2, 1.8);
+    CHECK(v.X == Approx(-27));
+    CHECK(v.Y == Approx(83));
+    CHECK(v.Z == Approx(-163));
 }
 
 TEST_CASE("Normalized vector", "[Vector3]")
