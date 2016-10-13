@@ -182,6 +182,18 @@ struct Vector3
     static Vector3 Normalized(Vector3 v);
 
     /**
+     * Creates a new coordinate system out of the three vectors.
+     * Normalizes "normal", normalizes "tangent" and makes it orthogonal to
+     * "normal" and normalizes "binormal" and makes it orthogonal to both
+     * "normal" and "tangent".
+     * @param normal: A reference to the first axis vector.
+     * @param tangent: A reference to the second axis vector.
+     * @param binormal: A reference to the third axis vector.
+     */
+    static void OrthoNormalize(Vector3 &normal, Vector3 &tangent,
+                               Vector3 &binormal);
+
+    /**
      * Returns the vector projection of a onto b.
      * @param a: The target vector.
      * @param b: The vector being projected onto.
@@ -209,6 +221,14 @@ struct Vector3
      * @return: A new vector pointing outward from the plane.
      */
     static Vector3 Reflect(Vector3 vector, Vector3 planeNormal);
+
+    /**
+     * Returns the vector rejection of a on b.
+     * @param a: The target vector.
+     * @param b: The vector being projected onto.
+     * @return: A new vector.
+     */
+    static Vector3 Reject(Vector3 a, Vector3 b);
 
     /**
      * Multiplies two vectors component-wise.
@@ -360,6 +380,17 @@ Vector3 Vector3::Normalized(Vector3 v)
     return v / Magnitude(v);
 }
 
+void Vector3::OrthoNormalize(Vector3 &normal, Vector3 &tangent,
+                             Vector3 &binormal)
+{
+    normal = Normalized(normal);
+    tangent = ProjectOnPlane(tangent, normal);
+    tangent = Normalized(tangent);
+    binormal = ProjectOnPlane(binormal, tangent);
+    binormal = ProjectOnPlane(binormal, normal);
+    binormal = Normalized(binormal);
+}
+
 Vector3 Vector3::Project(Vector3 a, Vector3 b)
 {
     double m = Magnitude(b);
@@ -368,12 +399,17 @@ Vector3 Vector3::Project(Vector3 a, Vector3 b)
 
 Vector3 Vector3::ProjectOnPlane(Vector3 vector, Vector3 planeNormal)
 {
-    return vector - Project(vector, planeNormal);
+    return Reject(vector, planeNormal);
 }
 
 Vector3 Vector3::Reflect(Vector3 vector, Vector3 planeNormal)
 {
     return vector - 2 * Project(vector, planeNormal);
+}
+
+Vector3 Vector3::Reject(Vector3 a, Vector3 b)
+{
+    return a - Project(a, b);
 }
 
 Vector3 Vector3::Scale(Vector3 a, Vector3 b)

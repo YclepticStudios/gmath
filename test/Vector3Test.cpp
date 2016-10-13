@@ -479,6 +479,43 @@ TEST_CASE("Normalized vector", "[Vector3]")
     CHECK(n.Z == Approx(-0.881571));
 }
 
+TEST_CASE("OrthoNormalize three vectors", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v3 = Vector3(7, -3, -1);
+    Vector3::OrthoNormalize(v1, v2, v3);
+    CHECK(Vector3::Angle(v1, v2) == Approx(M_PI / 2));
+    CHECK(Vector3::Angle(v2, v3) == Approx(M_PI / 2));
+    CHECK(Vector3::Angle(v3, v1) == Approx(M_PI / 2));
+    CHECK(Vector3::Magnitude(v1) == Approx(1));
+    CHECK(Vector3::Magnitude(v2) == Approx(1));
+    CHECK(Vector3::Magnitude(v3) == Approx(1));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v3 = Vector3(-0.73, 0.624, 0.0346);
+    Vector3::OrthoNormalize(v1, v2, v3);
+    CHECK(Vector3::Angle(v1, v2) == Approx(M_PI / 2));
+    CHECK(Vector3::Angle(v2, v3) == Approx(M_PI / 2));
+    CHECK(Vector3::Angle(v3, v1) == Approx(M_PI / 2));
+    CHECK(Vector3::Magnitude(v1) == Approx(1));
+    CHECK(Vector3::Magnitude(v2) == Approx(1));
+    CHECK(Vector3::Magnitude(v3) == Approx(1));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    v3 = Vector3(-57, -46, 635);
+    Vector3::OrthoNormalize(v1, v2, v3);
+    CHECK(Vector3::Angle(v1, v2) == Approx(M_PI / 2));
+    CHECK(Vector3::Angle(v2, v3) == Approx(M_PI / 2));
+    CHECK(Vector3::Angle(v3, v1) == Approx(M_PI / 2));
+    CHECK(Vector3::Magnitude(v1) == Approx(1));
+    CHECK(Vector3::Magnitude(v2) == Approx(1));
+    CHECK(Vector3::Magnitude(v3) == Approx(1));
+}
+
 TEST_CASE("Vector projection of a on b", "[Vector3]")
 {
     // Case 1
@@ -559,6 +596,31 @@ TEST_CASE("Vector reflect off plane", "[Vector3]")
     CHECK(v.X == Approx(1));
     CHECK(v.Y == Approx(-2));
     CHECK(v.Z == Approx(3));
+}
+
+TEST_CASE("Vector rejection", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v = Vector3::Reject(v1, v2);
+    CHECK(v.X == Approx(3.7307692308));
+    CHECK(v.Y == Approx(-4.4230769231));
+    CHECK(v.Z == Approx(1.6923076923));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v = Vector3::Reject(v1, v2);
+    CHECK(v.X == Approx(0.2051334533));
+    CHECK(v.Y == Approx(0.0116998119));
+    CHECK(v.Z == Approx(0.0706524838));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    v = Vector3::Reject(v1, v2);
+    CHECK(v.X == Approx(-3.3560622203));
+    CHECK(v.Y == Approx(40.9663328361));
+    CHECK(v.Z == Approx(10.3888770509));
 }
 
 TEST_CASE("Scale vector", "[Vector3]")
