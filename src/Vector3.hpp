@@ -121,6 +121,17 @@ struct Vector3
     static double Dot(Vector3 lhs, Vector3 rhs);
 
     /**
+     * Converts a spherical representation of a vector into cartesian
+     * coordinates.
+     * This uses the ISO convention (radius r, inclination theta, azimuth phi).
+     * @param rad: The magnitude of the vector.
+     * @param theta: The angle in the XY plane from the X axis.
+     * @param phi: The angle from the positive Z axis to the vector.
+     * @return: A new vector.
+     */
+    static Vector3 FromSpherical(double rad, double theta, double phi);
+
+    /**
      * Returns a vector linearly interpolated between a and b, moving along
      * a straight line. The vector is clamped to never go beyond the end points.
      * @param a: The starting point.
@@ -248,6 +259,17 @@ struct Vector3
      */
     static double SqrMagnitude(Vector3 v);
 
+    /**
+     * Calculates the spherical coordinate space representation of a vector.
+     * This uses the ISO convention (radius r, inclination theta, azimuth phi).
+     * @param vector: The vector to convert.
+     * @param rad: The magnitude of the vector.
+     * @param theta: The angle in the XY plane from the X axis.
+     * @param phi: The angle from the positive Z axis to the vector.
+     */
+    static void ToSpherical(Vector3 vector, double &rad, double &theta,
+                            double &phi);
+
 
     /**
      * Operator overloading.
@@ -330,6 +352,15 @@ double Vector3::Distance(Vector3 a, Vector3 b)
 double Vector3::Dot(Vector3 lhs, Vector3 rhs)
 {
     return lhs.X * rhs.X + lhs.Y * rhs.Y + lhs.Z * rhs.Z;
+}
+
+Vector3 Vector3::FromSpherical(double rad, double theta, double phi)
+{
+    Vector3 v;
+    v.X = rad * sin(theta) * cos(phi);
+    v.Y = rad * sin(theta) * sin(phi);
+    v.Z = rad * cos(theta);
+    return v;
 }
 
 Vector3 Vector3::Lerp(Vector3 a, Vector3 b, double t)
@@ -420,6 +451,14 @@ Vector3 Vector3::Scale(Vector3 a, Vector3 b)
 double Vector3::SqrMagnitude(Vector3 v)
 {
     return v.X * v.X + v.Y * v.Y + v.Z * v.Z;
+}
+
+void Vector3::ToSpherical(Vector3 vector, double &rad, double &theta,
+                          double &phi)
+{
+    rad = Magnitude(vector);
+    theta = acos(vector.Z / rad);
+    phi = atan2(vector.Y, vector.X);
 }
 
 

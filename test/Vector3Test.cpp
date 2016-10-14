@@ -319,6 +319,34 @@ TEST_CASE("Dot product of vectors", "[Vector3]")
     CHECK(Vector3::Dot(v1, v2) == Approx(-49316));
 }
 
+TEST_CASE("From Spherical coordinate space", "[Vector3]")
+{
+    // Case 1
+    double rad = 6.7082;
+    double theta = 0.931931;
+    double phi = -1.19029;
+    Vector3 v = Vector3::FromSpherical(rad, theta, phi);
+    CHECK(v.X == Approx(2));
+    CHECK(v.Y == Approx(-5));
+    CHECK(v.Z == Approx(4));
+    // Case 2
+    rad = 0.242007;
+    theta = 1.69508;
+    phi = 0.0341533;
+    v = Vector3::FromSpherical(rad, theta, phi);
+    CHECK(v.X == Approx(0.24));
+    CHECK(v.Y == Approx(0.0082));
+    CHECK(v.Z == Approx(-0.03));
+    // Case 3
+    rad = 184.8972;
+    theta = 2.6499755;
+    phi = 1.8853006;
+    v = Vector3::FromSpherical(rad, theta, phi);
+    CHECK(v.X == Approx(-27));
+    CHECK(v.Y == Approx(83));
+    CHECK(v.Z == Approx(-163));
+}
+
 TEST_CASE("Lerp two vectors", "[Vector3]")
 {
     // Case 1
@@ -659,4 +687,27 @@ TEST_CASE("Square magnitude of a vector", "[Vector3]")
     // Case 3
     v = Vector3(-27, 83, -163);
     CHECK(Vector3::SqrMagnitude(v) == Approx(34187));
+}
+
+TEST_CASE("To Spherical coordinate space", "[Vector3]")
+{
+    // Case 1
+    Vector3 v = Vector3(2, -5, 4);
+    double rad, theta, phi;
+    Vector3::ToSpherical(v, rad, theta, phi);
+    CHECK(rad == Approx(6.7082));
+    CHECK(theta == Approx(0.931931));
+    CHECK(phi == Approx(-1.19029));
+    // Case 2
+    v = Vector3(0.24, 0.0082, -0.03);
+    Vector3::ToSpherical(v, rad, theta, phi);
+    CHECK(rad == Approx(0.242007));
+    CHECK(theta == Approx(1.69508));
+    CHECK(phi == Approx(0.0341533));
+    // Case 3
+    v = Vector3(-27, 83, -163);
+    Vector3::ToSpherical(v, rad, theta, phi);
+    CHECK(rad == Approx(184.8972));
+    CHECK(theta == Approx(2.6499755));
+    CHECK(phi == Approx(1.8853006));
 }
