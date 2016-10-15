@@ -69,6 +69,47 @@ struct Vector2
 
 
     /**
+     * Returns the magnitude of a vector.
+     * @param v: The vector in question.
+     * @return: A scalar value.
+     */
+    static double Magnitude(Vector2 v);
+
+    /**
+     * Returns a vector made from the largest components of two other vectors.
+     * @param a: The first vector.
+     * @param b: The second vector.
+     * @return: A new vector.
+     */
+    static Vector2 Max(Vector2 a, Vector2 b);
+
+    /**
+     * Returns a vector made from the smallest components of two other vectors.
+     * @param a: The first vector.
+     * @param b: The second vector.
+     * @return: A new vector.
+     */
+    static Vector2 Min(Vector2 a, Vector2 b);
+
+    /**
+     * Returns a new vector with magnitude of one.
+     * @param v: The vector in question.
+     * @return: A new vector.
+     */
+    static Vector2 Normalized(Vector2 v);
+
+    /**
+     * Returns the squared magnitude of a vector.
+     * This is useful when comparing relative lengths, where the exact length
+     * is not important, and much time can be saved by not calculating the
+     * square root.
+     * @param v: The vector in question.
+     * @return: A scalar value.
+     */
+    static double SqrMagnitude(Vector2 v);
+
+
+    /**
      * Operator overloading.
      */
     struct Vector2& operator+=(const double& rhs);
@@ -111,6 +152,36 @@ Vector2::Vector2() : X(0), Y(0) {}
 Vector2::Vector2(double data[]) : X(data[0]), Y(data[1]) {}
 Vector2::Vector2(double value) : X(value), Y(value) {}
 Vector2::Vector2(double x, double y) : X(x), Y(y) {}
+
+
+double Vector2::Magnitude(Vector2 v)
+{
+    return sqrt(SqrMagnitude(v));
+}
+
+Vector2 Vector2::Max(Vector2 a, Vector2 b)
+{
+    double x = a.X > b.X ? a.X : b.X;
+    double y = a.Y > b.Y ? a.Y : b.Y;
+    return Vector2(x, y);
+}
+
+Vector2 Vector2::Min(Vector2 a, Vector2 b)
+{
+    double x = a.X > b.X ? b.X : a.X;
+    double y = a.Y > b.Y ? b.Y : a.Y;
+    return Vector2(x, y);
+}
+
+Vector2 Vector2::Normalized(Vector2 v)
+{
+    return v / Magnitude(v);
+}
+
+double Vector2::SqrMagnitude(Vector2 v)
+{
+    return v.X * v.X + v.Y * v.Y;
+}
 
 
 struct Vector2& Vector2::operator+=(const double &rhs)

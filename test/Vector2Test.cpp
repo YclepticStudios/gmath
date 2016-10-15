@@ -184,3 +184,92 @@ TEST_CASE("Vector2 inequality", "[Vector2]")
     v2 = Vector2(-27, 84);
     CHECK(v1 != v2);
 }
+
+TEST_CASE("Magnitude of a Vector2", "[Vector2]")
+{
+    // Case 1
+    Vector2 v = Vector2(2, -5);
+    CHECK(Vector2::Magnitude(v) == Approx(5.385164807));
+    // Case 2
+    v = Vector2(0.24, 0.0082);
+    CHECK(Vector2::Magnitude(v) == Approx(0.2401400425));
+    // Case 3
+    v = Vector2(-27, 83);
+    CHECK(Vector2::Magnitude(v) == Approx(87.2811549));
+}
+
+TEST_CASE("Max of Vector2s", "[Vector2]")
+{
+    // Case 1
+    Vector2 v1 = Vector2(2, -5);
+    Vector2 v2 = Vector2(6, 2);
+    Vector2 v = Vector2::Max(v1, v2);
+    CHECK(v.X == Approx(6));
+    CHECK(v.Y == Approx(2));
+    // Case 2
+    v1 = Vector2(0.24, 0.0082);
+    v2 = Vector2(0.53, -0.0532);
+    v = Vector2::Max(v1, v2);
+    CHECK(v.X == Approx(0.53));
+    CHECK(v.Y == Approx(0.0082));
+    // Case 3
+    v1 = Vector2(-27, 83);
+    v2 = Vector2(36, -64);
+    v = Vector2::Max(v1, v2);
+    CHECK(v.X == Approx(36));
+    CHECK(v.Y == Approx(83));
+}
+
+TEST_CASE("Min of Vector2s", "[Vector2]")
+{
+    // Case 1
+    Vector2 v1 = Vector2(2, -5);
+    Vector2 v2 = Vector2(6, 2);
+    Vector2 v = Vector2::Min(v1, v2);
+    CHECK(v.X == Approx(2));
+    CHECK(v.Y == Approx(-5));
+    // Case 2
+    v1 = Vector2(0.24, 0.0082);
+    v2 = Vector2(0.53, -0.0532);
+    v = Vector2::Min(v1, v2);
+    CHECK(v.X == Approx(0.24));
+    CHECK(v.Y == Approx(-0.0532));
+    // Case 3
+    v1 = Vector2(-27, 83);
+    v2 = Vector2(36, -64);
+    v = Vector2::Min(v1, v2);
+    CHECK(v.X == Approx(-27));
+    CHECK(v.Y == Approx(-64));
+}
+
+TEST_CASE("Normalized Vector2", "[Vector2]")
+{
+    // Case 1
+    Vector2 v = Vector2(2, -5);
+    Vector2 n = Vector2::Normalized(v);
+    CHECK(n.X == Approx(0.3713906764));
+    CHECK(n.Y == Approx(-.9284766909));
+    // Case 2
+    v = Vector2(0.24, 0.0082);
+    n = Vector2::Normalized(v);
+    CHECK(n.X == Approx(0.9994168299));
+    CHECK(n.Y == Approx(0.0341467417));
+    // Case 3
+    v = Vector2(-27, 83);
+    n = Vector2::Normalized(v);
+    CHECK(n.X == Approx(-0.3093451276));
+    CHECK(n.Y == Approx(0.9509498367));
+}
+
+TEST_CASE("Square magnitude of a Vector2", "[Vector2]")
+{
+    // Case 1
+    Vector2 v = Vector2(2, -5);
+    CHECK(Vector2::SqrMagnitude(v) == Approx(29));
+    // Case 2
+    v = Vector2(0.24, 0.0082);
+    CHECK(Vector2::SqrMagnitude(v) == Approx(0.05766724));
+    // Case 3
+    v = Vector2(-27, 83);
+    CHECK(Vector2::SqrMagnitude(v) == Approx(7618));
+}
