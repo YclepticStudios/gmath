@@ -651,6 +651,80 @@ TEST_CASE("Vector rejection", "[Vector3]")
     CHECK(v.Z == Approx(10.3888770509));
 }
 
+TEST_CASE("Vector rotate towards", "[Vector3]")
+{
+    // Identical vectors rotate towards
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(2, -5, 4);
+    Vector3 v = Vector3::RotateTowards(v1, v2, 0.5, 3);
+    CHECK(v.X == Approx(2));
+    CHECK(v.Y == Approx(-5));
+    CHECK(v.Z == Approx(4));
+    // Opposite vectors rotate away
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = -v1;
+    v = Vector3::RotateTowards(v1, v2, -0.5, 2);
+    CHECK(v.X == Approx(0.24));
+    CHECK(v.Y == Approx(0.0082));
+    CHECK(v.Z == Approx(-0.03));
+    // Identical vectors rotate away
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(-27, 83, -163);
+    v = Vector3::RotateTowards(v1, v2, -0.2, 1);
+    CHECK(v.X == Approx(-27));
+    CHECK(v.Y == Approx(48.9624250412));
+    CHECK(v.Z == Approx(-176.2404066441));
+    // Rotate without change in magnitude
+    v1 = Vector3(1, 0, 0);
+    v2 = Vector3(0, -3, 0);
+    v = Vector3::RotateTowards(v1, v2, M_PI_4 , 0);
+    CHECK(v.X == Approx(0.7071067812));
+    CHECK(v.Y == Approx(-0.7071067812));
+    CHECK(v.Z == Approx(0));
+    // Rotate and change in magnitude
+    v1 = Vector3(1, 0, 0);
+    v2 = Vector3(0, 5, 0);
+    v = Vector3::RotateTowards(v1, v2, M_PI_4 , 2);
+    CHECK(v.X == Approx(2.1213203436));
+    CHECK(v.Y == Approx(2.1213203436));
+    CHECK(v.Z == Approx(0));
+    // Rotate and negative change in magnitude
+    v1 = Vector3(5, 0, 0);
+    v2 = Vector3(0, 1, 0);
+    v = Vector3::RotateTowards(v1, v2, M_PI_4 , 2);
+    CHECK(v.X == Approx(2.1213203436));
+    CHECK(v.Y == Approx(2.1213203436));
+    CHECK(v.Z == Approx(0));
+    // Clamp magnitude with max
+    v1 = Vector3(1, 0, 0);
+    v2 = Vector3(0, 5, 0);
+    v = Vector3::RotateTowards(v1, v2, M_PI_4 , 10);
+    CHECK(v.X == Approx(3.535533906));
+    CHECK(v.Y == Approx(3.535533906));
+    CHECK(v.Z == Approx(0));
+    // Clamp magnitude with min
+    v1 = Vector3(5, 0, 0);
+    v2 = Vector3(0, 1, 0);
+    v = Vector3::RotateTowards(v1, v2, M_PI_4 , 10);
+    CHECK(v.X == Approx(0.7071067812));
+    CHECK(v.Y == Approx(0.7071067812));
+    CHECK(v.Z == Approx(0));
+    // Clamp angle max
+    v1 = Vector3(2, -5, 4);
+    v2 = Vector3(6, 2, -8);
+    v = Vector3::RotateTowards(v1, v2, M_PI , 0);
+    CHECK(v.X == Approx(3.946761086));
+    CHECK(v.Y == Approx(1.315587029));
+    CHECK(v.Z == Approx(-5.262348114));
+    // Clamp angle min
+    v1 = Vector3(2, -5, 4);
+    v2 = Vector3(6, 2, -8);
+    v = Vector3::RotateTowards(v1, v2, 0 , 0);
+    CHECK(v.X == Approx(2));
+    CHECK(v.Y == Approx(-5));
+    CHECK(v.Z == Approx(4));
+}
+
 TEST_CASE("Scale vector", "[Vector3]")
 {
     // Case 1

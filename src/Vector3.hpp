@@ -242,6 +242,23 @@ struct Vector3
     static Vector3 Reject(Vector3 a, Vector3 b);
 
     /**
+     * Rotates vector "current" towards vector "target" by "maxRadiansDelta".
+     * This treats the vectors as directions and will linearly interpolate
+     * between their magnitudes by "maxMagnitudeDelta". This function does not
+     * overshoot. If a negative delta is supplied, it will rotate away from
+     * "target" until it is pointing the opposite direction, but will not
+     * overshoot that either.
+     * @param current: The starting direction.
+     * @param target: The destination direction.
+     * @param maxRadiansDelta: The maximum number of radians to rotate.
+     * @param maxMagnitudeDelta: The maximum delta for magnitude interpolation.
+     * @return: A new vector.
+     */
+    static Vector3 RotateTowards(Vector3 current, Vector3 target,
+                                 double maxRadiansDelta,
+                                 double maxMagnitudeDelta);
+
+    /**
      * Multiplies two vectors component-wise.
      * @param a: The lhs of the multiplication.
      * @param b: The rhs of the multiplication.
@@ -282,6 +299,7 @@ struct Vector3
     struct Vector3& operator-=(const Vector3& rhs);
 };
 
+Vector3 operator-(Vector3 rhs);
 Vector3 operator+(Vector3 lhs, const double rhs);
 Vector3 operator-(Vector3 lhs, const double rhs);
 Vector3 operator*(Vector3 lhs, const double rhs);
@@ -443,6 +461,36 @@ Vector3 Vector3::Reject(Vector3 a, Vector3 b)
     return a - Project(a, b);
 }
 
+Vector3 Vector3::RotateTowards(Vector3 current, Vector3 target,
+                               double maxRadiansDelta,
+                               double maxMagnitudeDelta)
+{
+    double magCur = Magnitude(current);
+    double magTar = Magnitude(target);
+    double newMag = magCur + maxMagnitudeDelta *
+        ((magTar > magCur) - (magCur > magTar));
+    newMag = fmin(newMag, fmax(magCur, magTar));
+    newMag = fmax(newMag, fmin(magCur, magTar));
+
+    double totalAngle = Angle(current, target) - maxRadiansDelta;
+    if (totalAngle <= 0)
+        return Normalized(target) * newMag;
+    else if (totalAngle >= M_PI)
+        return Normalized(-target) * newMag;
+
+    Vector3 axis = Cross(current, target);
+    double magAxis = Magnitude(axis);
+    if (magAxis == 0)
+        axis = Vector3::Right;
+    else
+        axis /= magAxis;
+    current = Normalized(current);
+    Vector3 newVector = current * cos(maxRadiansDelta) +
+        Cross(axis, current) * sin(maxRadiansDelta) +
+        axis * Dot(axis, current) * (1 - cos(maxRadiansDelta));
+    return newVector * newMag;
+}
+
 Vector3 Vector3::Scale(Vector3 a, Vector3 b)
 {
     return Vector3(a.X * b.X, a.Y * b.Y, a.Z * b.Z);
@@ -510,6 +558,7 @@ struct Vector3& Vector3::operator-=(const Vector3 &rhs)
     return *this;
 }
 
+Vector3 operator-(Vector3 rhs) { return rhs * -1; }
 Vector3 operator+(Vector3 lhs, const double rhs) { return lhs += rhs; }
 Vector3 operator-(Vector3 lhs, const double rhs) { return lhs -= rhs; }
 Vector3 operator*(Vector3 lhs, const double rhs) { return lhs *= rhs; }
