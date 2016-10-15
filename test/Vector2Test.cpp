@@ -185,6 +185,41 @@ TEST_CASE("Vector2 inequality", "[Vector2]")
     CHECK(v1 != v2);
 }
 
+TEST_CASE("Clamp magnitude of Vector2", "[Vector2]")
+{
+    // Case 1
+    Vector2 v = Vector2(2, -5);
+    v = Vector2::ClampMagnitude(v, 6);
+    CHECK(v.X == Approx(2));
+    CHECK(v.Y == Approx(-5));
+    // Case 2
+    v = Vector2(0.24, 0.0082);
+    v = Vector2::ClampMagnitude(v, 0.2);
+    CHECK(v.X == Approx(0.199883366));
+    CHECK(v.Y == Approx(0.006829348338));
+    // Case 3
+    v = Vector2(-50, 97);
+    v = Vector2::ClampMagnitude(v, 100);
+    CHECK(v.X == Approx(-45.8176021421));
+    CHECK(v.Y == Approx(88.8861481557));
+}
+
+TEST_CASE("Distance between Vector2 points", "[Vector2]")
+{
+    // Case 1
+    Vector2 v1 = Vector2(2, -5);
+    Vector2 v2 = Vector2(6, 2);
+    CHECK(Vector2::Distance(v1, v2) == Approx(8.0622577483));
+    // Case 2
+    v1 = Vector2(0.24, 0.0082);
+    v2 = Vector2(0.53, -0.0532);
+    CHECK(Vector2::Distance(v1, v2) == Approx(0.2964286761));
+    // Case 3
+    v1 = Vector2(-27, 83);
+    v2 = Vector2(36, -64);
+    CHECK(Vector2::Distance(v1, v2) == Approx(159.9312352231));
+}
+
 TEST_CASE("Magnitude of a Vector2", "[Vector2]")
 {
     // Case 1

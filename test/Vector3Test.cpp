@@ -287,7 +287,7 @@ TEST_CASE("Cross product of Vector3s", "[Vector3]")
     CHECK(v.Z == Approx(0));
 }
 
-TEST_CASE("Distance between points", "[Vector3]")
+TEST_CASE("Distance between Vector3 points", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);

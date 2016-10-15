@@ -69,6 +69,22 @@ struct Vector2
 
 
     /**
+     * Returns a vector with its magnitude clamped to maxLength.
+     * @param vector: The target vector.
+     * @param maxLength: The maximum length of the return vector.
+     * @return: A new vector.
+     */
+    static Vector2 ClampMagnitude(Vector2 vector, double maxLength);
+
+    /**
+     * Returns the distance between a and b.
+     * @param a: The first point.
+     * @param b: The second point.
+     * @return: A scalar value.
+     */
+    static double Distance(Vector2 a, Vector2 b);
+
+    /**
      * Returns the magnitude of a vector.
      * @param v: The vector in question.
      * @return: A scalar value.
@@ -153,6 +169,19 @@ Vector2::Vector2(double data[]) : X(data[0]), Y(data[1]) {}
 Vector2::Vector2(double value) : X(value), Y(value) {}
 Vector2::Vector2(double x, double y) : X(x), Y(y) {}
 
+
+Vector2 Vector2::ClampMagnitude(Vector2 vector, double maxLength)
+{
+    double length = Magnitude(vector);
+    if (length > maxLength)
+        vector *= maxLength / length;
+    return vector;
+}
+
+double Vector2::Distance(Vector2 a, Vector2 b)
+{
+    return Vector2::Magnitude(a - b);
+}
 
 double Vector2::Magnitude(Vector2 v)
 {
