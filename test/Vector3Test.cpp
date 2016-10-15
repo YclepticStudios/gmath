@@ -33,7 +33,7 @@
 #include "Vector3.hpp"
 
 
-TEST_CASE("Vector plus scalar", "[Vector3]")
+TEST_CASE("Vector3 plus scalar", "[Vector3]")
 {
     // Case 1
     Vector3 v = Vector3(2, -5, 4);
@@ -55,7 +55,7 @@ TEST_CASE("Vector plus scalar", "[Vector3]")
     CHECK(v.Z == Approx(-150));
 }
 
-TEST_CASE("Vector minus scalar", "[Vector3]")
+TEST_CASE("Vector3 minus scalar", "[Vector3]")
 {
     // Case 1
     Vector3 v = Vector3(2, -5, 4);
@@ -77,7 +77,7 @@ TEST_CASE("Vector minus scalar", "[Vector3]")
     CHECK(v.Z == Approx(-176));
 }
 
-TEST_CASE("Vector times scalar", "[Vector3]")
+TEST_CASE("Vector3 times scalar", "[Vector3]")
 {
     // Case 1
     Vector3 v = Vector3(2, -5, 4);
@@ -99,7 +99,7 @@ TEST_CASE("Vector times scalar", "[Vector3]")
     CHECK(v.Z == Approx(-2119));
 }
 
-TEST_CASE("Vector divided by scalar", "[Vector3]")
+TEST_CASE("Vector3 divided by scalar", "[Vector3]")
 {
     // Case 1
     Vector3 v = Vector3(2, -5, 4);
@@ -121,7 +121,7 @@ TEST_CASE("Vector divided by scalar", "[Vector3]")
     CHECK(v.Z == Approx(-12.538462));
 }
 
-TEST_CASE("Vector plus vector", "[Vector3]")
+TEST_CASE("Vector3 plus Vector3", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -146,7 +146,7 @@ TEST_CASE("Vector plus vector", "[Vector3]")
     CHECK(v.Z == Approx(101));
 }
 
-TEST_CASE("Vector minus vector", "[Vector3]")
+TEST_CASE("Vector3 minus Vector3", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -171,7 +171,7 @@ TEST_CASE("Vector minus vector", "[Vector3]")
     CHECK(v.Z == Approx(-427));
 }
 
-TEST_CASE("Vector equality", "[Vector3]")
+TEST_CASE("Vector3 equality", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -187,7 +187,7 @@ TEST_CASE("Vector equality", "[Vector3]")
     CHECK_FALSE(v1 == v2);
 }
 
-TEST_CASE("Vector inequality", "[Vector3]")
+TEST_CASE("Vector3 inequality", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -203,7 +203,7 @@ TEST_CASE("Vector inequality", "[Vector3]")
     CHECK(v1 != v2);
 }
 
-TEST_CASE("Angle between vectors", "[Vector3]")
+TEST_CASE("Angle between Vector3s", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -219,7 +219,7 @@ TEST_CASE("Angle between vectors", "[Vector3]")
     CHECK(Vector3::Angle(v1, v2) == Approx(2.91024));
 }
 
-TEST_CASE("Clamp magnitude of vector", "[Vector3]")
+TEST_CASE("Clamp magnitude of Vector3", "[Vector3]")
 {
     // Case 1
     Vector3 v = Vector3(2, -5, 4);
@@ -257,7 +257,7 @@ TEST_CASE("Component of a along b", "[Vector3]")
     CHECK(Vector3::Component(v1, v2) == Approx(-179.9710189279));
 }
 
-TEST_CASE("Cross product of vectors", "[Vector3]")
+TEST_CASE("Cross product of Vector3s", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -303,7 +303,7 @@ TEST_CASE("Distance between points", "[Vector3]")
     CHECK(Vector3::Distance(v1, v2) == Approx(455.968));
 }
 
-TEST_CASE("Dot product of vectors", "[Vector3]")
+TEST_CASE("Dot product of Vector3s", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -347,7 +347,7 @@ TEST_CASE("From Spherical coordinate space", "[Vector3]")
     CHECK(v.Z == Approx(-163));
 }
 
-TEST_CASE("Lerp two vectors", "[Vector3]")
+TEST_CASE("Lerp two Vector3s", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -372,7 +372,7 @@ TEST_CASE("Lerp two vectors", "[Vector3]")
     CHECK(v.Z == Approx(264));
 }
 
-TEST_CASE("Lerp two vectors without clamping", "[Vector3]")
+TEST_CASE("Lerp two Vector3s without clamping", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -397,7 +397,7 @@ TEST_CASE("Lerp two vectors without clamping", "[Vector3]")
     CHECK(v.Z == Approx(562.9));
 }
 
-TEST_CASE("Magnitude of a vector", "[Vector3]")
+TEST_CASE("Magnitude of a Vector3", "[Vector3]")
 {
     // Case 1
     Vector3 v = Vector3(2, -5, 4);
@@ -410,7 +410,7 @@ TEST_CASE("Magnitude of a vector", "[Vector3]")
     CHECK(Vector3::Magnitude(v) == Approx(184.897269));
 }
 
-TEST_CASE("Max of vectors", "[Vector3]")
+TEST_CASE("Max of Vector3s", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -435,7 +435,7 @@ TEST_CASE("Max of vectors", "[Vector3]")
     CHECK(v.Z == Approx(264));
 }
 
-TEST_CASE("Min of vectors", "[Vector3]")
+TEST_CASE("Min of Vector3s", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -485,7 +485,7 @@ TEST_CASE("Move towards", "[Vector3]")
     CHECK(v.Z == Approx(-163));
 }
 
-TEST_CASE("Normalized vector", "[Vector3]")
+TEST_CASE("Normalized Vector3", "[Vector3]")
 {
     // Case 1
     Vector3 v = Vector3(2, -5, 4);
@@ -507,7 +507,7 @@ TEST_CASE("Normalized vector", "[Vector3]")
     CHECK(n.Z == Approx(-0.881571));
 }
 
-TEST_CASE("OrthoNormalize three vectors", "[Vector3]")
+TEST_CASE("OrthoNormalize three Vector3s", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -544,7 +544,7 @@ TEST_CASE("OrthoNormalize three vectors", "[Vector3]")
     CHECK(Vector3::Magnitude(v3) == Approx(1));
 }
 
-TEST_CASE("Vector projection of a on b", "[Vector3]")
+TEST_CASE("Vector3 projection of a on b", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -569,7 +569,7 @@ TEST_CASE("Vector projection of a on b", "[Vector3]")
     CHECK(v.Z == Approx(-173.3888770509));
 }
 
-TEST_CASE("Vector projection on plane", "[Vector3]")
+TEST_CASE("Vector3 projection on plane", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -594,7 +594,7 @@ TEST_CASE("Vector projection on plane", "[Vector3]")
     CHECK(v.Z == Approx(10.3888770509));
 }
 
-TEST_CASE("Vector reflect off plane", "[Vector3]")
+TEST_CASE("Vector3 reflect off plane", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -626,7 +626,7 @@ TEST_CASE("Vector reflect off plane", "[Vector3]")
     CHECK(v.Z == Approx(3));
 }
 
-TEST_CASE("Vector rejection", "[Vector3]")
+TEST_CASE("Vector3 rejection", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -651,7 +651,7 @@ TEST_CASE("Vector rejection", "[Vector3]")
     CHECK(v.Z == Approx(10.3888770509));
 }
 
-TEST_CASE("Vector rotate towards", "[Vector3]")
+TEST_CASE("Vector3 rotate towards", "[Vector3]")
 {
     // Identical vectors rotate towards
     Vector3 v1 = Vector3(2, -5, 4);
@@ -725,7 +725,7 @@ TEST_CASE("Vector rotate towards", "[Vector3]")
     CHECK(v.Z == Approx(4));
 }
 
-TEST_CASE("Scale vector", "[Vector3]")
+TEST_CASE("Scale Vector3", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -750,7 +750,7 @@ TEST_CASE("Scale vector", "[Vector3]")
     CHECK(v.Z == Approx(-43032));
 }
 
-TEST_CASE("Slerp two vectors with clamping", "[Vector3]")
+TEST_CASE("Slerp two Vector3s with clamping", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -775,7 +775,7 @@ TEST_CASE("Slerp two vectors with clamping", "[Vector3]")
     CHECK(v.Z == Approx(264));
 }
 
-TEST_CASE("Slerp two vectors without clamping", "[Vector3]")
+TEST_CASE("Slerp two Vector3s without clamping", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);
@@ -800,7 +800,7 @@ TEST_CASE("Slerp two vectors without clamping", "[Vector3]")
     CHECK(v.Z == Approx(-219.3645));
 }
 
-TEST_CASE("Square magnitude of a vector", "[Vector3]")
+TEST_CASE("Square magnitude of a Vector3", "[Vector3]")
 {
     // Case 1
     Vector3 v = Vector3(2, -5, 4);
