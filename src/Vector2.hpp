@@ -85,6 +85,14 @@ struct Vector2
     static double Distance(Vector2 a, Vector2 b);
 
     /**
+     * Returns the dot product of two vectors.
+     * @param lhs: The left side of the multiplication.
+     * @param rhs: The right side of the multiplication.
+     * @return: A scalar value.
+     */
+    static double Dot(Vector2 lhs, Vector2 rhs);
+
+    /**
      * Returns the magnitude of a vector.
      * @param v: The vector in question.
      * @return: A scalar value.
@@ -113,6 +121,14 @@ struct Vector2
      * @return: A new vector.
      */
     static Vector2 Normalized(Vector2 v);
+
+    /**
+     * Multiplies two vectors component-wise.
+     * @param a: The lhs of the multiplication.
+     * @param b: The rhs of the multiplication.
+     * @return: A new vector.
+     */
+    static Vector2 Scale(Vector2 a, Vector2 b);
 
     /**
      * Returns the squared magnitude of a vector.
@@ -183,6 +199,11 @@ double Vector2::Distance(Vector2 a, Vector2 b)
     return Vector2::Magnitude(a - b);
 }
 
+double Vector2::Dot(Vector2 lhs, Vector2 rhs)
+{
+    return lhs.X * rhs.X + lhs.Y * rhs.Y;
+}
+
 double Vector2::Magnitude(Vector2 v)
 {
     return sqrt(SqrMagnitude(v));
@@ -205,6 +226,11 @@ Vector2 Vector2::Min(Vector2 a, Vector2 b)
 Vector2 Vector2::Normalized(Vector2 v)
 {
     return v / Magnitude(v);
+}
+
+Vector2 Vector2::Scale(Vector2 a, Vector2 b)
+{
+    return Vector2(a.X * b.X, a.Y * b.Y);
 }
 
 double Vector2::SqrMagnitude(Vector2 v)

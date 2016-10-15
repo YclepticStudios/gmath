@@ -220,6 +220,22 @@ TEST_CASE("Distance between Vector2 points", "[Vector2]")
     CHECK(Vector2::Distance(v1, v2) == Approx(159.9312352231));
 }
 
+TEST_CASE("Dot product of Vector2s", "[Vector2]")
+{
+    // Case 1
+    Vector2 v1 = Vector2(2, -5);
+    Vector2 v2 = Vector2(6, 2);
+    CHECK(Vector2::Dot(v1, v2) == Approx(2));
+    // Case 2
+    v1 = Vector2(0.24, 0.0082);
+    v2 = Vector2(0.53, -0.0532);
+    CHECK(Vector2::Dot(v1, v2) == Approx(0.12676376));
+    // Case 3
+    v1 = Vector2(-27, 83);
+    v2 = Vector2(36, -64);
+    CHECK(Vector2::Dot(v1, v2) == Approx(-6284));
+}
+
 TEST_CASE("Magnitude of a Vector2", "[Vector2]")
 {
     // Case 1
@@ -294,6 +310,28 @@ TEST_CASE("Normalized Vector2", "[Vector2]")
     n = Vector2::Normalized(v);
     CHECK(n.X == Approx(-0.3093451276));
     CHECK(n.Y == Approx(0.9509498367));
+}
+
+TEST_CASE("Scale Vector2", "[Vector2]")
+{
+    // Case 1
+    Vector2 v1 = Vector2(2, -5);
+    Vector2 v2 = Vector2(6, 2);
+    Vector2 v = Vector2::Scale(v1, v2);
+    CHECK(v.X == Approx(12));
+    CHECK(v.Y == Approx(-10));
+    // Case 2
+    v1 = Vector2(0.24, 0.0082);
+    v2 = Vector2(0.53, -0.0532);
+    v = Vector2::Scale(v1, v2);
+    CHECK(v.X == Approx(0.1272));
+    CHECK(v.Y == Approx(-0.00043624));
+    // Case 3
+    v1 = Vector2(-27, 83);
+    v2 = Vector2(36, -64);
+    v = Vector2::Scale(v1, v2);
+    CHECK(v.X == Approx(-972));
+    CHECK(v.Y == Approx(-5312));
 }
 
 TEST_CASE("Square magnitude of a Vector2", "[Vector2]")
