@@ -750,6 +750,56 @@ TEST_CASE("Scale vector", "[Vector3]")
     CHECK(v.Z == Approx(-43032));
 }
 
+TEST_CASE("Slerp two vectors with clamping", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v = Vector3::Slerp(v1, v2, -0.2);
+    CHECK(v.X == Approx(2));
+    CHECK(v.Y == Approx(-5));
+    CHECK(v.Z == Approx(4));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v = Vector3::Slerp(v1, v2, 0.33);
+    CHECK(v.X == Approx(0.6141718));
+    CHECK(v.Y == Approx(0.008699415));
+    CHECK(v.Z == Approx(-0.328942));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    v = Vector3::Slerp(v1, v2, 1.7);
+    CHECK(v.X == Approx(36));
+    CHECK(v.Y == Approx(-64));
+    CHECK(v.Z == Approx(264));
+}
+
+TEST_CASE("Slerp two vectors without clamping", "[Vector3]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(2, -5, 4);
+    Vector3 v2 = Vector3(6, 2, -8);
+    Vector3 v = Vector3::SlerpUnclamped(v1, v2, -0.2);
+    CHECK(v.X == Approx(-0.2476361));
+    CHECK(v.Y == Approx(-3.772974));
+    CHECK(v.Z == Approx(4.671862));
+    // Case 2
+    v1 = Vector3(0.24, 0.0082, -0.03);
+    v2 = Vector3(0.53, -0.0532, -1.53);
+    v = Vector3::SlerpUnclamped(v1, v2, 0.33);
+    CHECK(v.X == Approx(0.6141718));
+    CHECK(v.Y == Approx(0.008699415));
+    CHECK(v.Z == Approx(-0.328942));
+    // Case 3
+    v1 = Vector3(-27, 83, -163);
+    v2 = Vector3(36, -64, 264);
+    v = Vector3::SlerpUnclamped(v1, v2, 1.7);
+    CHECK(v.X == Approx(3.913376));
+    CHECK(v.Y == Approx(-255.0197));
+    CHECK(v.Z == Approx(-219.3645));
+}
+
 TEST_CASE("Square magnitude of a vector", "[Vector3]")
 {
     // Case 1

@@ -267,6 +267,26 @@ struct Vector3
     static Vector3 Scale(Vector3 a, Vector3 b);
 
     /**
+     * Returns a vector rotated towards b from a by the percent t.
+     * Since interpolation is done spherically, the vector moves at a constant
+     * angular velocity. This rotation is clamped to 0 <= t <= 1.
+     * @param a: The starting direction.
+     * @param b: The ending direction.
+     * @param t: The interpolation value [0-1].
+     */
+    static Vector3 Slerp(Vector3 a, Vector3 b, double t);
+
+    /**
+     * Returns a vector rotated towards b from a by the percent t.
+     * Since interpolation is done spherically, the vector moves at a constant
+     * angular velocity. This rotation is unclamped.
+     * @param a: The starting direction.
+     * @param b: The ending direction.
+     * @param t: The interpolation value [0-1].
+     */
+    static Vector3 SlerpUnclamped(Vector3 a, Vector3 b, double t);
+
+    /**
      * Returns the squared magnitude of a vector.
      * This is useful when comparing relative lengths, where the exact length
      * is not important, and much time can be saved by not calculating the
@@ -383,8 +403,8 @@ Vector3 Vector3::FromSpherical(double rad, double theta, double phi)
 
 Vector3 Vector3::Lerp(Vector3 a, Vector3 b, double t)
 {
-    if (t < 0) t = 0;
-    else if (t > 1) t = 1;
+    if (t < 0) return a;
+    else if (t > 1) return b;
     return LerpUnclamped(a, b, t);
 }
 
@@ -494,6 +514,26 @@ Vector3 Vector3::RotateTowards(Vector3 current, Vector3 target,
 Vector3 Vector3::Scale(Vector3 a, Vector3 b)
 {
     return Vector3(a.X * b.X, a.Y * b.Y, a.Z * b.Z);
+}
+
+Vector3 Vector3::Slerp(Vector3 a, Vector3 b, double t)
+{
+    if (t < 0) return a;
+    else if (t > 1) return b;
+    return SlerpUnclamped(a, b, t);
+}
+
+Vector3 Vector3::SlerpUnclamped(Vector3 a, Vector3 b, double t)
+{
+    double magA = Magnitude(a);
+    double magB = Magnitude(b);
+    a /= magA;
+    b /= magB;
+    double dot = Dot(a, b);
+    double theta = acos(dot) * t;
+    Vector3 relativeVec = Normalized(b - a * dot);
+    Vector3 newVec = a * cos(theta) + relativeVec * sin(theta);
+    return newVec * (magA + (magB - magA) * t);
 }
 
 double Vector3::SqrMagnitude(Vector3 v)
