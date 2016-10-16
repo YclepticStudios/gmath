@@ -69,12 +69,28 @@ struct Vector2
 
 
     /**
+     * Returns the angle between two vectors in radians.
+     * @param a: The first vector.
+     * @param b: The second vector.
+     * @return: A scalar value.
+     */
+    static double Angle(Vector2 a, Vector2 b);
+
+    /**
      * Returns a vector with its magnitude clamped to maxLength.
      * @param vector: The target vector.
      * @param maxLength: The maximum length of the return vector.
      * @return: A new vector.
      */
     static Vector2 ClampMagnitude(Vector2 vector, double maxLength);
+
+    /**
+     * Returns the component of a in the direction of b (scalar projection).
+     * @param a: The target vector.
+     * @param b: The vector being compared against.
+     * @return: A scalar value.
+     */
+    static double Component(Vector2 a, Vector2 b);
 
     /**
      * Returns the distance between a and b.
@@ -91,6 +107,26 @@ struct Vector2
      * @return: A scalar value.
      */
     static double Dot(Vector2 lhs, Vector2 rhs);
+
+    /**
+     * Returns a vector linearly interpolated between a and b, moving along
+     * a straight line. The vector is clamped to never go beyond the end points.
+     * @param a: The starting point.
+     * @param b: The ending point.
+     * @param t: The interpolation value [0-1].
+     * @return: A new vector.
+     */
+    static Vector2 Lerp(Vector2 a, Vector2 b, double t);
+
+    /**
+     * Returns a vector linearly interpolated between a and b, moving along
+     * a straight line.
+     * @param a: The starting point.
+     * @param b: The ending point.
+     * @param t: The interpolation value [0-1] (no actual bounds).
+     * @return: A new vector.
+     */
+    static Vector2 LerpUnclamped(Vector2 a, Vector2 b, double t);
 
     /**
      * Returns the magnitude of a vector.
@@ -186,12 +222,22 @@ Vector2::Vector2(double value) : X(value), Y(value) {}
 Vector2::Vector2(double x, double y) : X(x), Y(y) {}
 
 
+double Vector2::Angle(Vector2 a, Vector2 b)
+{
+    return acos(Dot(a, b) / (Magnitude(a) * Magnitude(b)));
+}
+
 Vector2 Vector2::ClampMagnitude(Vector2 vector, double maxLength)
 {
     double length = Magnitude(vector);
     if (length > maxLength)
         vector *= maxLength / length;
     return vector;
+}
+
+double Vector2::Component(Vector2 a, Vector2 b)
+{
+    return Dot(a, b) / Magnitude(b);
 }
 
 double Vector2::Distance(Vector2 a, Vector2 b)
@@ -202,6 +248,18 @@ double Vector2::Distance(Vector2 a, Vector2 b)
 double Vector2::Dot(Vector2 lhs, Vector2 rhs)
 {
     return lhs.X * rhs.X + lhs.Y * rhs.Y;
+}
+
+Vector2 Vector2::Lerp(Vector2 a, Vector2 b, double t)
+{
+    if (t < 0) return a;
+    else if (t > 1) return b;
+    return LerpUnclamped(a, b, t);
+}
+
+Vector2 Vector2::LerpUnclamped(Vector2 a, Vector2 b, double t)
+{
+    return (b - a) * t + a;
 }
 
 double Vector2::Magnitude(Vector2 v)

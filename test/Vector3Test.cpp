@@ -241,7 +241,7 @@ TEST_CASE("Clamp magnitude of Vector3", "[Vector3]")
     CHECK(v.Z == Approx(-88.1570620707));
 }
 
-TEST_CASE("Component of a along b", "[Vector3]")
+TEST_CASE("Component of a along b (Vector3)", "[Vector3]")
 {
     // Case 1
     Vector3 v1 = Vector3(2, -5, 4);

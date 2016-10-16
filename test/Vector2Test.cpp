@@ -185,6 +185,22 @@ TEST_CASE("Vector2 inequality", "[Vector2]")
     CHECK(v1 != v2);
 }
 
+TEST_CASE("Angle between Vector2s", "[Vector2]")
+{
+    // Case 1
+    Vector2 v1 = Vector2(2, -5);
+    Vector2 v2 = Vector2(6, 2);
+    CHECK(Vector2::Angle(v1, v2) == Approx(1.5120404684));
+    // Case 2
+    v1 = Vector2(0.24, 0.0082);
+    v2 = Vector2(0.53, -0.0532);
+    CHECK(Vector2::Angle(v1, v2) == Approx(0.1341958967));
+    // Case 3
+    v1 = Vector2(-27, 83);
+    v2 = Vector2(36, -64);
+    CHECK(Vector2::Angle(v1, v2) == Approx(2.9437072677));
+}
+
 TEST_CASE("Clamp magnitude of Vector2", "[Vector2]")
 {
     // Case 1
@@ -202,6 +218,22 @@ TEST_CASE("Clamp magnitude of Vector2", "[Vector2]")
     v = Vector2::ClampMagnitude(v, 100);
     CHECK(v.X == Approx(-45.8176021421));
     CHECK(v.Y == Approx(88.8861481557));
+}
+
+TEST_CASE("Component of a along b (Vector2)", "[Vector2]")
+{
+    // Case 1
+    Vector2 v1 = Vector2(2, -5);
+    Vector2 v2 = Vector2(6, 2);
+    CHECK(Vector2::Component(v1, v2) == Approx(0.316227766));
+    // Case 2
+    v1 = Vector2(0.24, 0.0082);
+    v2 = Vector2(0.53, -0.0532);
+    CHECK(Vector2::Component(v1, v2) == Approx(0.2379810081));
+    // Case 3
+    v1 = Vector2(-27, 83);
+    v2 = Vector2(36, -64);
+    CHECK(Vector2::Component(v1, v2) == Approx(-85.5778230514));
 }
 
 TEST_CASE("Distance between Vector2 points", "[Vector2]")
@@ -234,6 +266,50 @@ TEST_CASE("Dot product of Vector2s", "[Vector2]")
     v1 = Vector2(-27, 83);
     v2 = Vector2(36, -64);
     CHECK(Vector2::Dot(v1, v2) == Approx(-6284));
+}
+
+TEST_CASE("Lerp two Vector2s", "[Vector2]")
+{
+    // Case 1
+    Vector2 v1 = Vector2(2, -5);
+    Vector2 v2 = Vector2(6, 2);
+    Vector2 v = Vector2::Lerp(v1, v2, -0.2);
+    CHECK(v.X == Approx(2));
+    CHECK(v.Y == Approx(-5));
+    // Case 2
+    v1 = Vector2(0.24, 0.0082);
+    v2 = Vector2(0.53, -0.0532);
+    v = Vector2::Lerp(v1, v2, 0.33);
+    CHECK(v.X == Approx(0.3357));
+    CHECK(v.Y == Approx(-0.012062));
+    // Case 3
+    v1 = Vector2(-27, 83);
+    v2 = Vector2(36, -64);
+    v = Vector2::Lerp(v1, v2, 1.7);
+    CHECK(v.X == Approx(36));
+    CHECK(v.Y == Approx(-64));
+}
+
+TEST_CASE("Lerp two Vector2s without clamping", "[Vector2]")
+{
+    // Case 1
+    Vector2 v1 = Vector2(2, -5);
+    Vector2 v2 = Vector2(6, 2);
+    Vector2 v = Vector2::LerpUnclamped(v1, v2, -0.2);
+    CHECK(v.X == Approx(1.2));
+    CHECK(v.Y == Approx(-6.4));
+    // Case 2
+    v1 = Vector2(0.24, 0.0082);
+    v2 = Vector2(0.53, -0.0532);
+    v = Vector2::LerpUnclamped(v1, v2, 0.33);
+    CHECK(v.X == Approx(0.3357));
+    CHECK(v.Y == Approx(-0.012062));
+    // Case 3
+    v1 = Vector2(-27, 83);
+    v2 = Vector2(36, -64);
+    v = Vector2::LerpUnclamped(v1, v2, 1.7);
+    CHECK(v.X == Approx(80.1));
+    CHECK(v.Y == Approx(-166.9));
 }
 
 TEST_CASE("Magnitude of a Vector2", "[Vector2]")
