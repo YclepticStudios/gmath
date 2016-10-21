@@ -358,7 +358,10 @@ Vector3::Vector3(double x, double y, double z) : X(x), Y(y), Z(z) {}
 
 double Vector3::Angle(Vector3 a, Vector3 b)
 {
-    return acos(Dot(a, b) / (Magnitude(a) * Magnitude(b)));
+    double v = Dot(a, b) / (Magnitude(a) * Magnitude(b));
+    v = fmax(v, -1.0);
+    v = fmin(v, 1.0);
+    return acos(v);
 }
 
 Vector3 Vector3::ClampMagnitude(Vector3 vector, double maxLength)
@@ -501,13 +504,12 @@ Vector3 Vector3::RotateTowards(Vector3 current, Vector3 target,
     Vector3 axis = Cross(current, target);
     double magAxis = Magnitude(axis);
     if (magAxis == 0)
-        axis = Vector3::Right;
+        axis = Normalized(Cross(current, current + Vector3(3.95, 5.32, -4.24)));
     else
         axis /= magAxis;
     current = Normalized(current);
     Vector3 newVector = current * cos(maxRadiansDelta) +
-        Cross(axis, current) * sin(maxRadiansDelta) +
-        axis * Dot(axis, current) * (1 - cos(maxRadiansDelta));
+        Cross(axis, current) * sin(maxRadiansDelta);
     return newVector * newMag;
 }
 
@@ -530,6 +532,8 @@ Vector3 Vector3::SlerpUnclamped(Vector3 a, Vector3 b, double t)
     a /= magA;
     b /= magB;
     double dot = Dot(a, b);
+    dot = fmax(dot, -1.0);
+    dot = fmin(dot, 1.0);
     double theta = acos(dot) * t;
     Vector3 relativeVec = Normalized(b - a * dot);
     Vector3 newVec = a * cos(theta) + relativeVec * sin(theta);

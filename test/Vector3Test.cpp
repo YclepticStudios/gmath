@@ -671,9 +671,8 @@ TEST_CASE("Vector3 rotate towards", "[Vector3]")
     v1 = Vector3(-27, 83, -163);
     v2 = Vector3(-27, 83, -163);
     v = Vector3::RotateTowards(v1, v2, -0.2, 1);
-    CHECK(v.X == Approx(-27));
-    CHECK(v.Y == Approx(48.9624250412));
-    CHECK(v.Z == Approx(-176.2404066441));
+    CHECK(Vector3::Angle(v, v1) == Approx(0.2));
+    CHECK(Vector3::Magnitude(v) == Vector3::Magnitude(v1));
     // Rotate without change in magnitude
     v1 = Vector3(1, 0, 0);
     v2 = Vector3(0, -3, 0);

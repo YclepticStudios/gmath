@@ -109,6 +109,15 @@ struct Vector2
     static double Dot(Vector2 lhs, Vector2 rhs);
 
     /**
+     * Converts a polar representation of a vector into cartesian
+     * coordinates.
+     * @param rad: The magnitude of the vector.
+     * @param theta: The angle from the X axis.
+     * @return: A new vector.
+     */
+    static Vector2 FromPolar(double rad, double theta);
+
+    /**
      * Returns a vector linearly interpolated between a and b, moving along
      * a straight line. The vector is clamped to never go beyond the end points.
      * @param a: The starting point.
@@ -152,11 +161,74 @@ struct Vector2
     static Vector2 Min(Vector2 a, Vector2 b);
 
     /**
+     * Returns a vector "maxDistanceDelta" units closer to the target. This
+     * interpolation is in a straight line, and will not overshoot.
+     * @param current: The current position.
+     * @param target: The destination position.
+     * @param maxDistanceDelta: The maximum distance to move.
+     * @return: A new vector.
+     */
+    static Vector2 MoveTowards(Vector2 current, Vector2 target,
+                               double maxDistanceDelta);
+
+    /**
      * Returns a new vector with magnitude of one.
      * @param v: The vector in question.
      * @return: A new vector.
      */
     static Vector2 Normalized(Vector2 v);
+
+    /**
+     * Creates a new coordinate system out of the two vectors.
+     * Normalizes "normal" and normalizes "tangent" and makes it orthogonal to
+     * "normal"..
+     * @param normal: A reference to the first axis vector.
+     * @param tangent: A reference to the second axis vector.
+     */
+    static void OrthoNormalize(Vector2 &normal, Vector2 &tangent);
+
+    /**
+     * Returns the vector projection of a onto b.
+     * @param a: The target vector.
+     * @param b: The vector being projected onto.
+     * @return: A new vector.
+     */
+    static Vector2 Project(Vector2 a, Vector2 b);
+
+    /**
+     * Returns a vector reflected about the provided line.
+     * This behaves as if there is a plane with the line as its normal, and the
+     * vector comes in and bounces off this plane.
+     * @param vector: The vector traveling inward at the imaginary plane.
+     * @param line: The line about which to reflect.
+     * @return: A new vector pointing outward from the imaginary plane.
+     */
+    static Vector2 Reflect(Vector2 vector, Vector2 line);
+
+    /**
+     * Returns the vector rejection of a on b.
+     * @param a: The target vector.
+     * @param b: The vector being projected onto.
+     * @return: A new vector.
+     */
+    static Vector2 Reject(Vector2 a, Vector2 b);
+
+    /**
+     * Rotates vector "current" towards vector "target" by "maxRadiansDelta".
+     * This treats the vectors as directions and will linearly interpolate
+     * between their magnitudes by "maxMagnitudeDelta". This function does not
+     * overshoot. If a negative delta is supplied, it will rotate away from
+     * "target" until it is pointing the opposite direction, but will not
+     * overshoot that either.
+     * @param current: The starting direction.
+     * @param target: The destination direction.
+     * @param maxRadiansDelta: The maximum number of radians to rotate.
+     * @param maxMagnitudeDelta: The maximum delta for magnitude interpolation.
+     * @return: A new vector.
+     */
+    static Vector2 RotateTowards(Vector2 current, Vector2 target,
+                                 double maxRadiansDelta,
+                                 double maxMagnitudeDelta);
 
     /**
      * Multiplies two vectors component-wise.
@@ -167,6 +239,26 @@ struct Vector2
     static Vector2 Scale(Vector2 a, Vector2 b);
 
     /**
+     * Returns a vector rotated towards b from a by the percent t.
+     * Since interpolation is done spherically, the vector moves at a constant
+     * angular velocity. This rotation is clamped to 0 <= t <= 1.
+     * @param a: The starting direction.
+     * @param b: The ending direction.
+     * @param t: The interpolation value [0-1].
+     */
+    static Vector2 Slerp(Vector2 a, Vector2 b, double t);
+
+    /**
+     * Returns a vector rotated towards b from a by the percent t.
+     * Since interpolation is done spherically, the vector moves at a constant
+     * angular velocity. This rotation is unclamped.
+     * @param a: The starting direction.
+     * @param b: The ending direction.
+     * @param t: The interpolation value [0-1].
+     */
+    static Vector2 SlerpUnclamped(Vector2 a, Vector2 b, double t);
+
+    /**
      * Returns the squared magnitude of a vector.
      * This is useful when comparing relative lengths, where the exact length
      * is not important, and much time can be saved by not calculating the
@@ -175,6 +267,14 @@ struct Vector2
      * @return: A scalar value.
      */
     static double SqrMagnitude(Vector2 v);
+
+    /**
+     * Calculates the polar coordinate space representation of a vector.
+     * @param vector: The vector to convert.
+     * @param rad: The magnitude of the vector.
+     * @param theta: The angle from the X axis.
+     */
+    static void ToPolar(Vector2 vector, double &rad, double &theta);
 
 
     /**
@@ -224,7 +324,10 @@ Vector2::Vector2(double x, double y) : X(x), Y(y) {}
 
 double Vector2::Angle(Vector2 a, Vector2 b)
 {
-    return acos(Dot(a, b) / (Magnitude(a) * Magnitude(b)));
+    double v = Dot(a, b) / (Magnitude(a) * Magnitude(b));
+    v = fmax(v, -1.0);
+    v = fmin(v, 1.0);
+    return acos(v);
 }
 
 Vector2 Vector2::ClampMagnitude(Vector2 vector, double maxLength)
@@ -248,6 +351,14 @@ double Vector2::Distance(Vector2 a, Vector2 b)
 double Vector2::Dot(Vector2 lhs, Vector2 rhs)
 {
     return lhs.X * rhs.X + lhs.Y * rhs.Y;
+}
+
+Vector2 Vector2::FromPolar(double rad, double theta)
+{
+    Vector2 v;
+    v.X = rad * cos(theta);
+    v.Y = rad * sin(theta);
+    return v;
 }
 
 Vector2 Vector2::Lerp(Vector2 a, Vector2 b, double t)
@@ -281,9 +392,69 @@ Vector2 Vector2::Min(Vector2 a, Vector2 b)
     return Vector2(x, y);
 }
 
+Vector2 Vector2::MoveTowards(Vector2 current, Vector2 target,
+                             double maxDistanceDelta)
+{
+    Vector2 d = target - current;
+    double m = Magnitude(d);
+    if (m < maxDistanceDelta || m == 0)
+        return target;
+    return current + (d * maxDistanceDelta / m);
+}
+
 Vector2 Vector2::Normalized(Vector2 v)
 {
     return v / Magnitude(v);
+}
+
+void Vector2::OrthoNormalize(Vector2 &normal, Vector2 &tangent)
+{
+    normal = Normalized(normal);
+    tangent = Reject(tangent, normal);
+    tangent = Normalized(tangent);
+}
+
+Vector2 Vector2::Project(Vector2 a, Vector2 b)
+{
+    double m = Magnitude(b);
+    return Dot(a, b) / (m * m) * b;
+}
+
+Vector2 Vector2::Reflect(Vector2 vector, Vector2 planeNormal)
+{
+    return vector - 2 * Project(vector, planeNormal);
+}
+
+Vector2 Vector2::Reject(Vector2 a, Vector2 b)
+{
+    return a - Project(a, b);
+}
+
+Vector2 Vector2::RotateTowards(Vector2 current, Vector2 target,
+                               double maxRadiansDelta,
+                               double maxMagnitudeDelta)
+{
+    double magCur = Magnitude(current);
+    double magTar = Magnitude(target);
+    double newMag = magCur + maxMagnitudeDelta *
+        ((magTar > magCur) - (magCur > magTar));
+    newMag = fmin(newMag, fmax(magCur, magTar));
+    newMag = fmax(newMag, fmin(magCur, magTar));
+
+    double totalAngle = Angle(current, target) - maxRadiansDelta;
+    if (totalAngle <= 0)
+        return Normalized(target) * newMag;
+    else if (totalAngle >= M_PI)
+        return Normalized(-target) * newMag;
+
+    double axis = current.X * target.Y - current.Y * target.X;
+    axis = axis / fabs(axis);
+    if (!(1 - fabs(axis) < 0.00001))
+        axis = 1;
+    current = Normalized(current);
+    Vector2 newVector = current * cos(maxRadiansDelta) +
+        Vector2(-current.Y, current.X) * sin(maxRadiansDelta) * axis;
+    return newVector * newMag;
 }
 
 Vector2 Vector2::Scale(Vector2 a, Vector2 b)
@@ -291,9 +462,37 @@ Vector2 Vector2::Scale(Vector2 a, Vector2 b)
     return Vector2(a.X * b.X, a.Y * b.Y);
 }
 
+Vector2 Vector2::Slerp(Vector2 a, Vector2 b, double t)
+{
+    if (t < 0) return a;
+    else if (t > 1) return b;
+    return SlerpUnclamped(a, b, t);
+}
+
+Vector2 Vector2::SlerpUnclamped(Vector2 a, Vector2 b, double t)
+{
+    double magA = Magnitude(a);
+    double magB = Magnitude(b);
+    a /= magA;
+    b /= magB;
+    double dot = Dot(a, b);
+    dot = fmax(dot, -1.0);
+    dot = fmin(dot, 1.0);
+    double theta = acos(dot) * t;
+    Vector2 relativeVec = Normalized(b - a * dot);
+    Vector2 newVec = a * cos(theta) + relativeVec * sin(theta);
+    return newVec * (magA + (magB - magA) * t);
+}
+
 double Vector2::SqrMagnitude(Vector2 v)
 {
     return v.X * v.X + v.Y * v.Y;
+}
+
+void Vector2::ToPolar(Vector2 vector, double &rad, double &theta)
+{
+    rad = Magnitude(vector);
+    theta = atan2(vector.Y, vector.X);
 }
 
 
