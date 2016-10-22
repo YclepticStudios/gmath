@@ -249,6 +249,26 @@ TEST_CASE("Quaternion inequality", "[Quaternion]")
     CHECK(q1 != q2);
 }
 
+TEST_CASE("Angle between quaternions", "[Quaternion]")
+{
+    // Case 1
+    Quaternion q1 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    Quaternion q2 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    double a = Quaternion::Angle(q1, q2);
+    CHECK(a == Approx(2.94819));
+    // Case 2
+    a = Quaternion::Angle(q2, q1);
+    CHECK(a == Approx(2.94819));
+    // Case 3
+    q1 = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    a = Quaternion::Angle(q1, q2);
+    CHECK(a == Approx(2.399531));
+    // Case 4
+    a = Quaternion::Angle(q1, q1);
+    CHECK(a == Approx(0));
+}
+
 TEST_CASE("Quaternion conjugate", "[Quaternion]")
 {
     // Case 1
@@ -268,6 +288,31 @@ TEST_CASE("Quaternion conjugate", "[Quaternion]")
     // Case 3
     q1 = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
     q = Quaternion::Conjugate(q1);
+    CHECK(q.X == Approx(-0.3535534));
+    CHECK(q.Y == Approx(0.1464466));
+    CHECK(q.Z == Approx(-0.3535534));
+    CHECK(q.W == Approx(0.8535535));
+}
+
+TEST_CASE("Quaternion inverse", "[Quaternion]")
+{
+    // Case 1
+    Quaternion q1 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    Quaternion q = Quaternion::Inverse(q1);
+    CHECK(q.X == Approx(-0.3919183));
+    CHECK(q.Y == Approx(-0.3196269));
+    CHECK(q.Z == Approx(0.8430416));
+    CHECK(q.W == Approx(-0.1830837));
+    // Case 2
+    q1 = Quaternion(0.4, 0.2, -1.3, -0.5);
+    q = Quaternion::Inverse(q1);
+    CHECK(q.X == Approx(-0.1869158879));
+    CHECK(q.Y == Approx(-0.0934579439));
+    CHECK(q.Z == Approx(0.6074766355));
+    CHECK(q.W == Approx(-0.2336448598));
+    // Case 3
+    q1 = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
+    q = Quaternion::Inverse(q1);
     CHECK(q.X == Approx(-0.3535534));
     CHECK(q.Y == Approx(0.1464466));
     CHECK(q.Z == Approx(-0.3535534));

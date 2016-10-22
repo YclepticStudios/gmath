@@ -65,11 +65,26 @@ struct Quaternion
 
 
     /**
+     * Returns the angle between two quaternions.
+     * @param a: The first quaternion.
+     * @param b: The second quaternion.
+     * @return: A scalar value.
+     */
+    static double Angle(Quaternion a, Quaternion b);
+
+    /**
      * Returns the conjugate of a quaternion.
      * @param rotation: The quaternion in question.
      * @return: A new quaternion.
      */
     static Quaternion Conjugate(Quaternion rotation);
+
+    /**
+     * Returns the inverse of a rotation.
+     * @param rotation: The quaternion in question.
+     * @return: A new quaternion.
+     */
+    static Quaternion Inverse(Quaternion rotation);
 
     /**
      * Returns the norm of a quaternion.
@@ -129,9 +144,23 @@ Quaternion::Quaternion(double x, double y, double z, double w) : X(x), Y(y),
     Z(z), W(w) {}
 
 
+double Quaternion::Angle(Quaternion a, Quaternion b)
+{
+    double angle = acos((b * Inverse(a)).W) * 2.0;
+    if (angle > M_PI)
+        angle = 2.0 * M_PI - angle;
+    return angle;
+}
+
 Quaternion Quaternion::Conjugate(Quaternion rotation)
 {
     return Quaternion(-rotation.X, -rotation.Y, -rotation.Z, rotation.W);
+}
+
+Quaternion Quaternion::Inverse(Quaternion rotation)
+{
+    double n = Norm(rotation);
+    return Conjugate(rotation) / (n * n);
 }
 
 double Quaternion::Norm(Quaternion rotation)
