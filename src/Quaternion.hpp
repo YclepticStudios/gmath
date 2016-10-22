@@ -104,12 +104,12 @@ struct Quaternion
     /**
      * Operator overloading.
      */
-    struct Quaternion& operator+=(const double& rhs);
-    struct Quaternion& operator-=(const double& rhs);
+    struct Quaternion& operator+=(const double &rhs);
+    struct Quaternion& operator-=(const double &rhs);
     struct Quaternion& operator*=(const double &rhs);
     struct Quaternion& operator/=(const double &rhs);
-    struct Quaternion& operator+=(const Quaternion& rhs);
-    struct Quaternion& operator-=(const Quaternion& rhs);
+    struct Quaternion& operator+=(const Quaternion &rhs);
+    struct Quaternion& operator-=(const Quaternion &rhs);
     struct Quaternion& operator*=(const Quaternion &rhs);
 };
 

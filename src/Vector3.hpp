@@ -311,12 +311,12 @@ struct Vector3
     /**
      * Operator overloading.
      */
-    struct Vector3& operator+=(const double& rhs);
-    struct Vector3& operator-=(const double& rhs);
-    struct Vector3& operator*=(const double& rhs);
-    struct Vector3& operator/=(const double& rhs);
-    struct Vector3& operator+=(const Vector3& rhs);
-    struct Vector3& operator-=(const Vector3& rhs);
+    struct Vector3& operator+=(const double &rhs);
+    struct Vector3& operator-=(const double &rhs);
+    struct Vector3& operator*=(const double &rhs);
+    struct Vector3& operator/=(const double &rhs);
+    struct Vector3& operator+=(const Vector3 &rhs);
+    struct Vector3& operator-=(const Vector3 &rhs);
 };
 
 Vector3 operator-(Vector3 rhs);
