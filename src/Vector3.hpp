@@ -549,7 +549,10 @@ void Vector3::ToSpherical(Vector3 vector, double &rad, double &theta,
                           double &phi)
 {
     rad = Magnitude(vector);
-    theta = acos(vector.Z / rad);
+    double v = vector.Z / rad;
+    v = fmax(v, -1.0);
+    v = fmin(v, 1.0);
+    theta = acos(v);
     phi = atan2(vector.Y, vector.X);
 }
 
