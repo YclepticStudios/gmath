@@ -35,6 +35,40 @@
 #include <math.h>
 
 
+/**
+ * Attempt to include a header file if the file exists.
+ * If the file does not exist, create a dummy data structure for that type.
+ * If it cannot be determined if it exists, just attempt to include it.
+ */
+#ifdef __has_include
+#   if __has_include("Vector3.h")
+#       include "Vector3.h"
+#   else
+        struct Vector3
+        {
+            union
+            {
+                struct
+                {
+                    double X;
+                    double Y;
+                    double Z;
+                };
+                double data[3];
+            };
+
+            Vector3() : X(0), Y(0), Z(0) {}
+            Vector3(double data[]) : X(data[0]), Y(data[1]), Z(data[2]) {}
+            Vector3(double value) : X(value), Y(value), Z(value) {}
+            Vector3(double x, double y) : X(x), Y(y), Z(0) {}
+            Vector3(double x, double y, double z) : X(x), Y(y), Z(z) {}
+        };
+#   endif
+#else
+#   include "Vector3.h"
+#endif
+
+
 struct Quaternion
 {
     union
@@ -78,6 +112,23 @@ struct Quaternion
      * @return: A new quaternion.
      */
     static Quaternion Conjugate(Quaternion rotation);
+
+    /**
+     * Returns the dot product of two quaternions.
+     * @param lhs: The left side of the multiplication.
+     * @param rhs: The right side of the multiplication.
+     * @return: A scalar value.
+     */
+    static double Dot(Quaternion lhs, Quaternion rhs);
+
+    /**
+     * Creates a new quaternion from the angle-axis representation of
+     * a rotation.
+     * @param angle: The rotation angle in radians.
+     * @param axis: The vector about which the rotation occurs.
+     * @return: A new quaternion.
+     */
+    static Quaternion FromAngleAxis(double angle, Vector3 axis);
 
     /**
      * Returns the inverse of a rotation.
@@ -146,7 +197,10 @@ Quaternion::Quaternion(double x, double y, double z, double w) : X(x), Y(y),
 
 double Quaternion::Angle(Quaternion a, Quaternion b)
 {
-    double angle = acos((b * Inverse(a)).W) * 2.0;
+    double v = (b * Inverse(a)).W;
+    v = fmax(v, -1.0);
+    v = fmin(v, 1.0);
+    double angle = acos(v) * 2.0;
     if (angle > M_PI)
         angle = 2.0 * M_PI - angle;
     return angle;
@@ -155,6 +209,23 @@ double Quaternion::Angle(Quaternion a, Quaternion b)
 Quaternion Quaternion::Conjugate(Quaternion rotation)
 {
     return Quaternion(-rotation.X, -rotation.Y, -rotation.Z, rotation.W);
+}
+
+double Quaternion::Dot(Quaternion lhs, Quaternion rhs)
+{
+    return lhs.X * rhs.X + lhs.Y * rhs.Y + lhs.Z * rhs.Z + lhs.W * rhs.W;
+}
+
+Quaternion Quaternion::FromAngleAxis(double angle, Vector3 axis)
+{
+    Quaternion q;
+    double m = sqrt(axis.X * axis.X + axis.Y * axis.Y + axis.Z * axis.Z);
+    double s = sin(angle / 2) / m;
+    q.X = axis.X * s;
+    q.Y = axis.Y * s;
+    q.Z = axis.Z * s;
+    q.W = cos(angle / 2);
+    return q;
 }
 
 Quaternion Quaternion::Inverse(Quaternion rotation)

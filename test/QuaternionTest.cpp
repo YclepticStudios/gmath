@@ -294,6 +294,56 @@ TEST_CASE("Quaternion conjugate", "[Quaternion]")
     CHECK(q.W == Approx(0.8535535));
 }
 
+TEST_CASE("Dot product of quaternions", "[Quaternion]")
+{
+    // Case 1
+    Quaternion q1 = Quaternion(-27, 83, 32, -153);
+    Quaternion q2 = Quaternion(36, -64, 12, 24);
+    double a = Quaternion::Dot(q1, q2);
+    CHECK(a == Approx(-9572));
+    // Case 2
+    a = Quaternion::Dot(q2, q1);
+    CHECK(a == Approx(-9572));
+    // Case 3
+    q1 = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    a = Quaternion::Dot(q1, q2);
+    CHECK(a == Approx(-0.362576186656952));
+    // Case 4
+    q1 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q2 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    a = Quaternion::Dot(q1, q1);
+    CHECK(a == Approx(1.0));
+}
+
+TEST_CASE("Quaternion from angle axis", "[Quaternion]")
+{
+    // Case 1
+    double angle = 0.7;
+    Vector3 axis = Vector3(1, 2, 3);
+    Quaternion q = Quaternion::FromAngleAxis(angle, axis);
+    CHECK(q.X == Approx(0.09164329));
+    CHECK(q.Y == Approx(0.1832866));
+    CHECK(q.Z == Approx(0.2749299));
+    CHECK(q.W == Approx(0.9393727));
+    // Case 2
+    angle = 3.14159265;
+    axis = Vector3(0, 0, 1);
+    q = Quaternion::FromAngleAxis(angle, axis);
+    CHECK(q.X == Approx(0));
+    CHECK(q.Y == Approx(0));
+    CHECK(q.Z == Approx(1));
+    CHECK(q.W == Approx(0));
+    // Case 2
+    angle = -9.24;
+    axis = Vector3(-1, 0.4, 2.9);
+    q = Quaternion::FromAngleAxis(angle, axis);
+    CHECK(q.X == Approx(-0.3218755));
+    CHECK(q.Y == Approx(0.1287502));
+    CHECK(q.Z == Approx(0.9334388));
+    CHECK(q.W == Approx(-0.09225724));
+}
+
 TEST_CASE("Quaternion inverse", "[Quaternion]")
 {
     // Case 1
