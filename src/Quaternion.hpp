@@ -131,6 +131,18 @@ struct Quaternion
     static Quaternion FromAngleAxis(double angle, Vector3 axis);
 
     /**
+     * Create a new quaternion from the euler angle representation of
+     * a rotation. The z, x and y values represent rotations about those
+     * axis in that respective order.
+     * @param x: The rotation about the x-axis in radians.
+     * @param y: The rotation about the y-axis in radians.
+     * @param z: The rotation about the z-axis in radians.
+     * @return: A new quaternion.
+     */
+    static Quaternion FromEuler(Vector3 rotation);
+    static Quaternion FromEuler(double x, double y, double z);
+
+    /**
      * Returns the inverse of a rotation.
      * @param rotation: The quaternion in question.
      * @return: A new quaternion.
@@ -225,6 +237,27 @@ Quaternion Quaternion::FromAngleAxis(double angle, Vector3 axis)
     q.Y = axis.Y * s;
     q.Z = axis.Z * s;
     q.W = cos(angle / 2);
+    return q;
+}
+
+Quaternion Quaternion::FromEuler(Vector3 rotation)
+{
+    return FromEuler(rotation.X, rotation.Y, rotation.Z);
+}
+
+Quaternion Quaternion::FromEuler(double x, double y, double z)
+{
+    double cx = cos(x * 0.5);
+	double cy = cos(y * 0.5);
+	double cz = cos(z * 0.5);
+	double sx = sin(x * 0.5);
+	double sy = sin(y * 0.5);
+	double sz = sin(z * 0.5);
+    Quaternion q;
+	q.X = cx * sy * sz + cy * cz * sx;
+	q.Y = cx * cz * sy - cy * sx * sz;
+	q.Z = cx * cy * sz - cz * sx * sy;
+	q.W = sx * sy * sz + cx * cy * cz;
     return q;
 }
 

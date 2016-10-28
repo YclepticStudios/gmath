@@ -344,6 +344,30 @@ TEST_CASE("Quaternion from angle axis", "[Quaternion]")
     CHECK(q.W == Approx(-0.09225724));
 }
 
+TEST_CASE("Quaternion from euler angles", "[Quaternion]")
+{
+    // Case 1
+    Vector3 axis = Vector3(0.8, 1.4, 2.6);
+    Quaternion q = Quaternion::FromEuler(axis);
+    CHECK(q.X == Approx(0.6514133));
+    CHECK(q.Y == Approx(-0.1282655));
+    CHECK(q.Z == Approx(0.6116868));
+    CHECK(q.W == Approx(0.430172));
+    // Case 2
+    q = Quaternion::FromEuler(0, 0, 3.14159265);
+    CHECK(q.X == Approx(0));
+    CHECK(q.Y == Approx(0));
+    CHECK(q.Z == Approx(1));
+    CHECK(q.W == Approx(0));
+    // Case 2
+    axis = Vector3(-1, 0.4, 2.9);
+    q = Quaternion::FromEuler(axis);
+    CHECK(q.X == Approx(0.1164578));
+    CHECK(q.Y == Approx(0.4874545));
+    CHECK(q.Z == Approx(0.8652994));
+    CHECK(q.W == Approx(0.009090029));
+}
+
 TEST_CASE("Quaternion inverse", "[Quaternion]")
 {
     // Case 1
