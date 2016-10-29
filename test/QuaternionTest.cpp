@@ -433,3 +433,25 @@ TEST_CASE("Quaternion normalized", "[Quaternion]")
     CHECK(q.Z == Approx(-0.5));
     CHECK(q.W == Approx(0.5));
 }
+
+TEST_CASE("Quaternion to euler angles", "[Quaternion]")
+{
+    // Case 1
+    Quaternion q = Quaternion(0.6514133, -0.1282655, 0.6116868, 0.430172);
+    Vector3 v = Quaternion::ToEuler(q);
+    CHECK(v.X == Approx(0.8));
+    CHECK(v.Y == Approx(1.4));
+    CHECK(v.Z == Approx(2.6));
+    // Case 2
+    q = Quaternion(0, 0, 1.2, 0);
+    v = Quaternion::ToEuler(q);
+    CHECK(v.X == Approx(0));
+    CHECK(v.Y == Approx(0));
+    CHECK(v.Z == Approx(3.14159265));
+    // Case 2
+    q = Quaternion(0.1164578, 0.4874545, 0.8652994, 0.009090029);
+    v = Quaternion::ToEuler(q);
+    CHECK(v.X == Approx(-1));
+    CHECK(v.Y == Approx(0.4));
+    CHECK(v.Z == Approx(2.9));
+}

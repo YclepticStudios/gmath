@@ -163,6 +163,13 @@ struct Quaternion
      */
     static Quaternion Normalized(Quaternion rotation);
 
+    /**
+     * Returns the Euler angle representation of a rotation. The resulting
+     * vector contains the rotations about the z, x and y axis, in that order.
+     * @param rotation: The quaternion to convert.
+     * @return: A new vector.
+     */
+    static Vector3 ToEuler(Quaternion rotation);
 
     /**
      * Operator overloading.
@@ -280,6 +287,42 @@ Quaternion Quaternion::Normalized(Quaternion rotation)
     return rotation / Norm(rotation);
 }
 
+Vector3 Quaternion::ToEuler(Quaternion rotation)
+{
+    float sqw = rotation.W * rotation.W;
+    float sqx = rotation.X * rotation.X;
+    float sqy = rotation.Y * rotation.Y;
+    float sqz = rotation.Z * rotation.Z;
+    // If normalized is one, otherwise is correction factor
+    float unit = sqx + sqy + sqz + sqw;
+    float test = rotation.X * rotation.W - rotation.Y * rotation.Z;
+    Vector3 v;
+    // Singularity at north pole
+    if (test > 0.4995f * unit)
+    {
+        v.Y = 2 * atan2(rotation.Y, rotation.X);
+        v.X = M_PI_2;
+        v.Z = 0;
+        return v;
+    }
+    // Singularity at south pole
+    if (test < -0.4995f * unit)
+    {
+        v.Y = -2 * atan2(rotation.Y, rotation.X);
+        v.X = -M_PI_2;
+        v.Z = 0;
+        return v;
+    }
+    // Yaw
+    v.Y = atan2(2 * rotation.W * rotation.Y + 2 * rotation.Z * rotation.X,
+        1 - 2 * (rotation.X * rotation.X + rotation.Y * rotation.Y));
+    // Pitch
+    v.X = asin(2 * (rotation.W * rotation.X - rotation.Y * rotation.Z));
+    // Roll
+    v.Z = atan2(2 * rotation.W * rotation.Z + 2 * rotation.X * rotation.Y,
+        1 - 2 * (rotation.Z * rotation.Z + rotation.X * rotation.X));
+    return v;
+}
 
 struct Quaternion& Quaternion::operator+=(const double &rhs)
 {
