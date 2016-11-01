@@ -50,26 +50,26 @@ struct Vector3
 
 
     /**
-     * Static constants.
+     * Constructors.
      */
-    static const Vector3 Zero;
-    static const Vector3 One;
-    static const Vector3 Right;
-    static const Vector3 Left;
-    static const Vector3 Up;
-    static const Vector3 Down;
-    static const Vector3 Forward;
-    static const Vector3 Backward;
+    inline Vector3();
+    inline Vector3(double data[]);
+    inline Vector3(double value);
+    inline Vector3(double x, double y);
+    inline Vector3(double x, double y, double z);
 
 
     /**
-     * Constructors.
+     * Constants for common vectors.
      */
-    Vector3();
-    Vector3(double data[]);
-    Vector3(double value);
-    Vector3(double x, double y);
-    Vector3(double x, double y, double z);
+    static inline Vector3 Zero();
+    static inline Vector3 One();
+    static inline Vector3 Right();
+    static inline Vector3 Left();
+    static inline Vector3 Up();
+    static inline Vector3 Down();
+    static inline Vector3 Forward();
+    static inline Vector3 Backward();
 
 
     /**
@@ -78,7 +78,7 @@ struct Vector3
      * @param b: The second vector.
      * @return: A scalar value.
      */
-    static double Angle(Vector3 a, Vector3 b);
+    static inline double Angle(Vector3 a, Vector3 b);
 
     /**
      * Returns a vector with its magnitude clamped to maxLength.
@@ -86,7 +86,7 @@ struct Vector3
      * @param maxLength: The maximum length of the return vector.
      * @return: A new vector.
      */
-    static Vector3 ClampMagnitude(Vector3 vector, double maxLength);
+    static inline Vector3 ClampMagnitude(Vector3 vector, double maxLength);
 
     /**
      * Returns the component of a in the direction of b (scalar projection).
@@ -94,7 +94,7 @@ struct Vector3
      * @param b: The vector being compared against.
      * @return: A scalar value.
      */
-    static double Component(Vector3 a, Vector3 b);
+    static inline double Component(Vector3 a, Vector3 b);
 
     /**
      * Returns the cross product of two vectors.
@@ -102,7 +102,7 @@ struct Vector3
      * @param rhs: The right side of the multiplication.
      * @return: A new vector.
      */
-    static Vector3 Cross(Vector3 lhs, Vector3 rhs);
+    static inline Vector3 Cross(Vector3 lhs, Vector3 rhs);
 
     /**
      * Returns the distance between a and b.
@@ -110,7 +110,7 @@ struct Vector3
      * @param b: The second point.
      * @return: A scalar value.
      */
-    static double Distance(Vector3 a, Vector3 b);
+    static inline double Distance(Vector3 a, Vector3 b);
 
     /**
      * Returns the dot product of two vectors.
@@ -118,7 +118,7 @@ struct Vector3
      * @param rhs: The right side of the multiplication.
      * @return: A scalar value.
      */
-    static double Dot(Vector3 lhs, Vector3 rhs);
+    static inline double Dot(Vector3 lhs, Vector3 rhs);
 
     /**
      * Converts a spherical representation of a vector into cartesian
@@ -129,7 +129,7 @@ struct Vector3
      * @param phi: The angle from the positive Z axis to the vector.
      * @return: A new vector.
      */
-    static Vector3 FromSpherical(double rad, double theta, double phi);
+    static inline Vector3 FromSpherical(double rad, double theta, double phi);
 
     /**
      * Returns a vector linearly interpolated between a and b, moving along
@@ -139,7 +139,7 @@ struct Vector3
      * @param t: The interpolation value [0-1].
      * @return: A new vector.
      */
-    static Vector3 Lerp(Vector3 a, Vector3 b, double t);
+    static inline Vector3 Lerp(Vector3 a, Vector3 b, double t);
 
     /**
      * Returns a vector linearly interpolated between a and b, moving along
@@ -149,14 +149,14 @@ struct Vector3
      * @param t: The interpolation value [0-1] (no actual bounds).
      * @return: A new vector.
      */
-    static Vector3 LerpUnclamped(Vector3 a, Vector3 b, double t);
+    static inline Vector3 LerpUnclamped(Vector3 a, Vector3 b, double t);
 
     /**
      * Returns the magnitude of a vector.
      * @param v: The vector in question.
      * @return: A scalar value.
      */
-    static double Magnitude(Vector3 v);
+    static inline double Magnitude(Vector3 v);
 
     /**
      * Returns a vector made from the largest components of two other vectors.
@@ -164,7 +164,7 @@ struct Vector3
      * @param b: The second vector.
      * @return: A new vector.
      */
-    static Vector3 Max(Vector3 a, Vector3 b);
+    static inline Vector3 Max(Vector3 a, Vector3 b);
 
     /**
      * Returns a vector made from the smallest components of two other vectors.
@@ -172,7 +172,7 @@ struct Vector3
      * @param b: The second vector.
      * @return: A new vector.
      */
-    static Vector3 Min(Vector3 a, Vector3 b);
+    static inline Vector3 Min(Vector3 a, Vector3 b);
 
     /**
      * Returns a vector "maxDistanceDelta" units closer to the target. This
@@ -182,7 +182,7 @@ struct Vector3
      * @param maxDistanceDelta: The maximum distance to move.
      * @return: A new vector.
      */
-    static Vector3 MoveTowards(Vector3 current, Vector3 target,
+    static inline Vector3 MoveTowards(Vector3 current, Vector3 target,
                                double maxDistanceDelta);
 
     /**
@@ -190,7 +190,15 @@ struct Vector3
      * @param v: The vector in question.
      * @return: A new vector.
      */
-    static Vector3 Normalized(Vector3 v);
+    static inline Vector3 Normalized(Vector3 v);
+
+    /**
+     * Returns an arbitrary vector orthogonal to the input.
+     * This vector is not normalized.
+     * @param v: The input vector.
+     * @return: A new vector.
+     */
+    static inline Vector3 Orthogonal(Vector3 v);
 
     /**
      * Creates a new coordinate system out of the three vectors.
@@ -201,7 +209,7 @@ struct Vector3
      * @param tangent: A reference to the second axis vector.
      * @param binormal: A reference to the third axis vector.
      */
-    static void OrthoNormalize(Vector3 &normal, Vector3 &tangent,
+    static inline void OrthoNormalize(Vector3 &normal, Vector3 &tangent,
                                Vector3 &binormal);
 
     /**
@@ -210,7 +218,7 @@ struct Vector3
      * @param b: The vector being projected onto.
      * @return: A new vector.
      */
-    static Vector3 Project(Vector3 a, Vector3 b);
+    static inline Vector3 Project(Vector3 a, Vector3 b);
 
     /**
      * Returns a vector projected onto a plane orthogonal to "planeNormal".
@@ -220,7 +228,7 @@ struct Vector3
      * @param planeNormal: The normal of the plane onto which to project.
      * @param: A new vector.
      */
-    static Vector3 ProjectOnPlane(Vector3 vector, Vector3 planeNormal);
+    static inline Vector3 ProjectOnPlane(Vector3 vector, Vector3 planeNormal);
 
     /**
      * Returns a vector reflected off the plane orthogonal to the normal.
@@ -231,7 +239,7 @@ struct Vector3
      * @param planeNormal: The normal of the plane off of which to reflect.
      * @return: A new vector pointing outward from the plane.
      */
-    static Vector3 Reflect(Vector3 vector, Vector3 planeNormal);
+    static inline Vector3 Reflect(Vector3 vector, Vector3 planeNormal);
 
     /**
      * Returns the vector rejection of a on b.
@@ -239,7 +247,7 @@ struct Vector3
      * @param b: The vector being projected onto.
      * @return: A new vector.
      */
-    static Vector3 Reject(Vector3 a, Vector3 b);
+    static inline Vector3 Reject(Vector3 a, Vector3 b);
 
     /**
      * Rotates vector "current" towards vector "target" by "maxRadiansDelta".
@@ -254,7 +262,7 @@ struct Vector3
      * @param maxMagnitudeDelta: The maximum delta for magnitude interpolation.
      * @return: A new vector.
      */
-    static Vector3 RotateTowards(Vector3 current, Vector3 target,
+    static inline Vector3 RotateTowards(Vector3 current, Vector3 target,
                                  double maxRadiansDelta,
                                  double maxMagnitudeDelta);
 
@@ -264,7 +272,7 @@ struct Vector3
      * @param b: The rhs of the multiplication.
      * @return: A new vector.
      */
-    static Vector3 Scale(Vector3 a, Vector3 b);
+    static inline Vector3 Scale(Vector3 a, Vector3 b);
 
     /**
      * Returns a vector rotated towards b from a by the percent t.
@@ -274,7 +282,7 @@ struct Vector3
      * @param b: The ending direction.
      * @param t: The interpolation value [0-1].
      */
-    static Vector3 Slerp(Vector3 a, Vector3 b, double t);
+    static inline Vector3 Slerp(Vector3 a, Vector3 b, double t);
 
     /**
      * Returns a vector rotated towards b from a by the percent t.
@@ -284,7 +292,7 @@ struct Vector3
      * @param b: The ending direction.
      * @param t: The interpolation value [0-1].
      */
-    static Vector3 SlerpUnclamped(Vector3 a, Vector3 b, double t);
+    static inline Vector3 SlerpUnclamped(Vector3 a, Vector3 b, double t);
 
     /**
      * Returns the squared magnitude of a vector.
@@ -294,7 +302,7 @@ struct Vector3
      * @param v: The vector in question.
      * @return: A scalar value.
      */
-    static double SqrMagnitude(Vector3 v);
+    static inline double SqrMagnitude(Vector3 v);
 
     /**
      * Calculates the spherical coordinate space representation of a vector.
@@ -304,34 +312,34 @@ struct Vector3
      * @param theta: The angle in the XY plane from the X axis.
      * @param phi: The angle from the positive Z axis to the vector.
      */
-    static void ToSpherical(Vector3 vector, double &rad, double &theta,
+    static inline void ToSpherical(Vector3 vector, double &rad, double &theta,
                             double &phi);
 
 
     /**
      * Operator overloading.
      */
-    struct Vector3& operator+=(const double &rhs);
-    struct Vector3& operator-=(const double &rhs);
-    struct Vector3& operator*=(const double &rhs);
-    struct Vector3& operator/=(const double &rhs);
-    struct Vector3& operator+=(const Vector3 &rhs);
-    struct Vector3& operator-=(const Vector3 &rhs);
+    inline struct Vector3& operator+=(const double rhs);
+    inline struct Vector3& operator-=(const double rhs);
+    inline struct Vector3& operator*=(const double rhs);
+    inline struct Vector3& operator/=(const double rhs);
+    inline struct Vector3& operator+=(const Vector3 rhs);
+    inline struct Vector3& operator-=(const Vector3 rhs);
 };
 
-Vector3 operator-(Vector3 rhs);
-Vector3 operator+(Vector3 lhs, const double rhs);
-Vector3 operator-(Vector3 lhs, const double rhs);
-Vector3 operator*(Vector3 lhs, const double rhs);
-Vector3 operator/(Vector3 lhs, const double rhs);
-Vector3 operator+(const double lhs, Vector3 rhs);
-Vector3 operator-(const double lhs, Vector3 rhs);
-Vector3 operator*(const double lhs, Vector3 rhs);
-Vector3 operator/(const double lhs, Vector3 rhs);
-Vector3 operator+(Vector3 lhs, const Vector3 &rhs);
-Vector3 operator-(Vector3 lhs, const Vector3 &rhs);
-bool operator==(const Vector3 &lhs, const Vector3 &rhs);
-bool operator!=(const Vector3 &lhs, const Vector3 &rhs);
+inline Vector3 operator-(Vector3 rhs);
+inline Vector3 operator+(Vector3 lhs, const double rhs);
+inline Vector3 operator-(Vector3 lhs, const double rhs);
+inline Vector3 operator*(Vector3 lhs, const double rhs);
+inline Vector3 operator/(Vector3 lhs, const double rhs);
+inline Vector3 operator+(const double lhs, Vector3 rhs);
+inline Vector3 operator-(const double lhs, Vector3 rhs);
+inline Vector3 operator*(const double lhs, Vector3 rhs);
+inline Vector3 operator/(const double lhs, Vector3 rhs);
+inline Vector3 operator+(Vector3 lhs, const Vector3 rhs);
+inline Vector3 operator-(Vector3 lhs, const Vector3 rhs);
+inline bool operator==(const Vector3 lhs, const Vector3 rhs);
+inline bool operator!=(const Vector3 lhs, const Vector3 rhs);
 
 
 
@@ -339,21 +347,21 @@ bool operator!=(const Vector3 &lhs, const Vector3 &rhs);
  * Implementation
  */
 
-const Vector3 Vector3::Zero = Vector3(0, 0, 0);
-const Vector3 Vector3::One = Vector3(1, 1, 1);
-const Vector3 Vector3::Right = Vector3(1, 0, 0);
-const Vector3 Vector3::Left = Vector3(-1, 0, 0);
-const Vector3 Vector3::Up = Vector3(0, 1, 0);
-const Vector3 Vector3::Down = Vector3(0, -1, 0);
-const Vector3 Vector3::Forward = Vector3(0, 0, 1);
-const Vector3 Vector3::Backward = Vector3(0, 0, -1);
-
-
 Vector3::Vector3() : X(0), Y(0), Z(0) {}
 Vector3::Vector3(double data[]) : X(data[0]), Y(data[1]), Z(data[2]) {}
 Vector3::Vector3(double value) : X(value), Y(value), Z(value) {}
 Vector3::Vector3(double x, double y) : X(x), Y(y), Z(0) {}
 Vector3::Vector3(double x, double y, double z) : X(x), Y(y), Z(z) {}
+
+
+Vector3 Vector3::Zero() { return Vector3(0, 0, 0); }
+Vector3 Vector3::One() { return Vector3(1, 1, 1); }
+Vector3 Vector3::Right() { return Vector3(1, 0, 0); }
+Vector3 Vector3::Left() { return Vector3(-1, 0, 0); }
+Vector3 Vector3::Up() { return Vector3(0, 1, 0); }
+Vector3 Vector3::Down() { return Vector3(0, -1, 0); }
+Vector3 Vector3::Forward() { return Vector3(0, 0, 1); }
+Vector3 Vector3::Backward() { return Vector3(0, 0, -1); }
 
 
 double Vector3::Angle(Vector3 a, Vector3 b)
@@ -450,6 +458,11 @@ Vector3 Vector3::MoveTowards(Vector3 current, Vector3 target,
 Vector3 Vector3::Normalized(Vector3 v)
 {
     return v / Magnitude(v);
+}
+
+Vector3 Vector3::Orthogonal(Vector3 v)
+{
+    return v.Z < v.X ? Vector3(v.Y, -v.X, 0) : Vector3(0, -v.Z, v.Y);
 }
 
 void Vector3::OrthoNormalize(Vector3 &normal, Vector3 &tangent,
@@ -557,7 +570,7 @@ void Vector3::ToSpherical(Vector3 vector, double &rad, double &theta,
 }
 
 
-struct Vector3& Vector3::operator+=(const double &rhs)
+struct Vector3& Vector3::operator+=(const double rhs)
 {
     X += rhs;
     Y += rhs;
@@ -565,7 +578,7 @@ struct Vector3& Vector3::operator+=(const double &rhs)
     return *this;
 }
 
-struct Vector3& Vector3::operator-=(const double &rhs)
+struct Vector3& Vector3::operator-=(const double rhs)
 {
     X -= rhs;
     Y -= rhs;
@@ -573,7 +586,7 @@ struct Vector3& Vector3::operator-=(const double &rhs)
     return *this;
 }
 
-struct Vector3& Vector3::operator*=(const double &rhs)
+struct Vector3& Vector3::operator*=(const double rhs)
 {
     X *= rhs;
     Y *= rhs;
@@ -581,7 +594,7 @@ struct Vector3& Vector3::operator*=(const double &rhs)
     return *this;
 }
 
-struct Vector3& Vector3::operator/=(const double &rhs)
+struct Vector3& Vector3::operator/=(const double rhs)
 {
     X /= rhs;
     Y /= rhs;
@@ -589,7 +602,7 @@ struct Vector3& Vector3::operator/=(const double &rhs)
     return *this;
 }
 
-struct Vector3& Vector3::operator+=(const Vector3 &rhs)
+struct Vector3& Vector3::operator+=(const Vector3 rhs)
 {
     X += rhs.X;
     Y += rhs.Y;
@@ -597,7 +610,7 @@ struct Vector3& Vector3::operator+=(const Vector3 &rhs)
     return *this;
 }
 
-struct Vector3& Vector3::operator-=(const Vector3 &rhs)
+struct Vector3& Vector3::operator-=(const Vector3 rhs)
 {
     X -= rhs.X;
     Y -= rhs.Y;
@@ -614,15 +627,15 @@ Vector3 operator+(const double lhs, Vector3 rhs) { return rhs += lhs; }
 Vector3 operator-(const double lhs, Vector3 rhs) { return rhs -= lhs; }
 Vector3 operator*(const double lhs, Vector3 rhs) { return rhs *= lhs; }
 Vector3 operator/(const double lhs, Vector3 rhs) { return rhs /= lhs; }
-Vector3 operator+(Vector3 lhs, const Vector3 &rhs) { return lhs += rhs; }
-Vector3 operator-(Vector3 lhs, const Vector3 &rhs) { return lhs -= rhs; }
+Vector3 operator+(Vector3 lhs, const Vector3 rhs) { return lhs += rhs; }
+Vector3 operator-(Vector3 lhs, const Vector3 rhs) { return lhs -= rhs; }
 
-bool operator==(const Vector3 &lhs, const Vector3 &rhs)
+bool operator==(const Vector3 lhs, const Vector3 rhs)
 {
     return lhs.X == rhs.X && lhs.Y == rhs.Y && lhs.Z == rhs.Z;
 }
 
-bool operator!=(const Vector3 &lhs, const Vector3 &rhs)
+bool operator!=(const Vector3 lhs, const Vector3 rhs)
 {
     return !(lhs == rhs);
 }
