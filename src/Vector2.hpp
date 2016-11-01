@@ -51,10 +51,10 @@ struct Vector2
     /**
      * Constructors.
      */
-    Vector2();
-    Vector2(double data[]);
-    Vector2(double value);
-    Vector2(double x, double y);
+    inline Vector2();
+    inline Vector2(double data[]);
+    inline Vector2(double value);
+    inline Vector2(double x, double y);
 
 
     /**
@@ -74,7 +74,7 @@ struct Vector2
      * @param b: The second vector.
      * @return: A scalar value.
      */
-    static double Angle(Vector2 a, Vector2 b);
+    static inline double Angle(Vector2 a, Vector2 b);
 
     /**
      * Returns a vector with its magnitude clamped to maxLength.
@@ -82,7 +82,7 @@ struct Vector2
      * @param maxLength: The maximum length of the return vector.
      * @return: A new vector.
      */
-    static Vector2 ClampMagnitude(Vector2 vector, double maxLength);
+    static inline Vector2 ClampMagnitude(Vector2 vector, double maxLength);
 
     /**
      * Returns the component of a in the direction of b (scalar projection).
@@ -90,7 +90,7 @@ struct Vector2
      * @param b: The vector being compared against.
      * @return: A scalar value.
      */
-    static double Component(Vector2 a, Vector2 b);
+    static inline double Component(Vector2 a, Vector2 b);
 
     /**
      * Returns the distance between a and b.
@@ -98,7 +98,7 @@ struct Vector2
      * @param b: The second point.
      * @return: A scalar value.
      */
-    static double Distance(Vector2 a, Vector2 b);
+    static inline double Distance(Vector2 a, Vector2 b);
 
     /**
      * Returns the dot product of two vectors.
@@ -106,7 +106,7 @@ struct Vector2
      * @param rhs: The right side of the multiplication.
      * @return: A scalar value.
      */
-    static double Dot(Vector2 lhs, Vector2 rhs);
+    static inline double Dot(Vector2 lhs, Vector2 rhs);
 
     /**
      * Converts a polar representation of a vector into cartesian
@@ -115,7 +115,7 @@ struct Vector2
      * @param theta: The angle from the X axis.
      * @return: A new vector.
      */
-    static Vector2 FromPolar(double rad, double theta);
+    static inline Vector2 FromPolar(double rad, double theta);
 
     /**
      * Returns a vector linearly interpolated between a and b, moving along
@@ -125,7 +125,7 @@ struct Vector2
      * @param t: The interpolation value [0-1].
      * @return: A new vector.
      */
-    static Vector2 Lerp(Vector2 a, Vector2 b, double t);
+    static inline Vector2 Lerp(Vector2 a, Vector2 b, double t);
 
     /**
      * Returns a vector linearly interpolated between a and b, moving along
@@ -135,14 +135,14 @@ struct Vector2
      * @param t: The interpolation value [0-1] (no actual bounds).
      * @return: A new vector.
      */
-    static Vector2 LerpUnclamped(Vector2 a, Vector2 b, double t);
+    static inline Vector2 LerpUnclamped(Vector2 a, Vector2 b, double t);
 
     /**
      * Returns the magnitude of a vector.
      * @param v: The vector in question.
      * @return: A scalar value.
      */
-    static double Magnitude(Vector2 v);
+    static inline double Magnitude(Vector2 v);
 
     /**
      * Returns a vector made from the largest components of two other vectors.
@@ -150,7 +150,7 @@ struct Vector2
      * @param b: The second vector.
      * @return: A new vector.
      */
-    static Vector2 Max(Vector2 a, Vector2 b);
+    static inline Vector2 Max(Vector2 a, Vector2 b);
 
     /**
      * Returns a vector made from the smallest components of two other vectors.
@@ -158,7 +158,7 @@ struct Vector2
      * @param b: The second vector.
      * @return: A new vector.
      */
-    static Vector2 Min(Vector2 a, Vector2 b);
+    static inline Vector2 Min(Vector2 a, Vector2 b);
 
     /**
      * Returns a vector "maxDistanceDelta" units closer to the target. This
@@ -168,7 +168,7 @@ struct Vector2
      * @param maxDistanceDelta: The maximum distance to move.
      * @return: A new vector.
      */
-    static Vector2 MoveTowards(Vector2 current, Vector2 target,
+    static inline Vector2 MoveTowards(Vector2 current, Vector2 target,
                                double maxDistanceDelta);
 
     /**
@@ -176,7 +176,7 @@ struct Vector2
      * @param v: The vector in question.
      * @return: A new vector.
      */
-    static Vector2 Normalized(Vector2 v);
+    static inline Vector2 Normalized(Vector2 v);
 
     /**
      * Creates a new coordinate system out of the two vectors.
@@ -185,7 +185,7 @@ struct Vector2
      * @param normal: A reference to the first axis vector.
      * @param tangent: A reference to the second axis vector.
      */
-    static void OrthoNormalize(Vector2 &normal, Vector2 &tangent);
+    static inline void OrthoNormalize(Vector2 &normal, Vector2 &tangent);
 
     /**
      * Returns the vector projection of a onto b.
@@ -193,7 +193,7 @@ struct Vector2
      * @param b: The vector being projected onto.
      * @return: A new vector.
      */
-    static Vector2 Project(Vector2 a, Vector2 b);
+    static inline Vector2 Project(Vector2 a, Vector2 b);
 
     /**
      * Returns a vector reflected about the provided line.
@@ -203,7 +203,7 @@ struct Vector2
      * @param line: The line about which to reflect.
      * @return: A new vector pointing outward from the imaginary plane.
      */
-    static Vector2 Reflect(Vector2 vector, Vector2 line);
+    static inline Vector2 Reflect(Vector2 vector, Vector2 line);
 
     /**
      * Returns the vector rejection of a on b.
@@ -211,7 +211,7 @@ struct Vector2
      * @param b: The vector being projected onto.
      * @return: A new vector.
      */
-    static Vector2 Reject(Vector2 a, Vector2 b);
+    static inline Vector2 Reject(Vector2 a, Vector2 b);
 
     /**
      * Rotates vector "current" towards vector "target" by "maxRadiansDelta".
@@ -226,7 +226,7 @@ struct Vector2
      * @param maxMagnitudeDelta: The maximum delta for magnitude interpolation.
      * @return: A new vector.
      */
-    static Vector2 RotateTowards(Vector2 current, Vector2 target,
+    static inline Vector2 RotateTowards(Vector2 current, Vector2 target,
                                  double maxRadiansDelta,
                                  double maxMagnitudeDelta);
 
@@ -236,7 +236,7 @@ struct Vector2
      * @param b: The rhs of the multiplication.
      * @return: A new vector.
      */
-    static Vector2 Scale(Vector2 a, Vector2 b);
+    static inline Vector2 Scale(Vector2 a, Vector2 b);
 
     /**
      * Returns a vector rotated towards b from a by the percent t.
@@ -246,7 +246,7 @@ struct Vector2
      * @param b: The ending direction.
      * @param t: The interpolation value [0-1].
      */
-    static Vector2 Slerp(Vector2 a, Vector2 b, double t);
+    static inline Vector2 Slerp(Vector2 a, Vector2 b, double t);
 
     /**
      * Returns a vector rotated towards b from a by the percent t.
@@ -256,7 +256,7 @@ struct Vector2
      * @param b: The ending direction.
      * @param t: The interpolation value [0-1].
      */
-    static Vector2 SlerpUnclamped(Vector2 a, Vector2 b, double t);
+    static inline Vector2 SlerpUnclamped(Vector2 a, Vector2 b, double t);
 
     /**
      * Returns the squared magnitude of a vector.
@@ -266,7 +266,7 @@ struct Vector2
      * @param v: The vector in question.
      * @return: A scalar value.
      */
-    static double SqrMagnitude(Vector2 v);
+    static inline double SqrMagnitude(Vector2 v);
 
     /**
      * Calculates the polar coordinate space representation of a vector.
@@ -274,33 +274,33 @@ struct Vector2
      * @param rad: The magnitude of the vector.
      * @param theta: The angle from the X axis.
      */
-    static void ToPolar(Vector2 vector, double &rad, double &theta);
+    static inline void ToPolar(Vector2 vector, double &rad, double &theta);
 
 
     /**
      * Operator overloading.
      */
-    struct Vector2& operator+=(const double rhs);
-    struct Vector2& operator-=(const double rhs);
-    struct Vector2& operator*=(const double rhs);
-    struct Vector2& operator/=(const double rhs);
-    struct Vector2& operator+=(const Vector2 rhs);
-    struct Vector2& operator-=(const Vector2 rhs);
+    inline struct Vector2& operator+=(const double rhs);
+    inline struct Vector2& operator-=(const double rhs);
+    inline struct Vector2& operator*=(const double rhs);
+    inline struct Vector2& operator/=(const double rhs);
+    inline struct Vector2& operator+=(const Vector2 rhs);
+    inline struct Vector2& operator-=(const Vector2 rhs);
 };
 
-Vector2 operator-(Vector2 rhs);
-Vector2 operator+(Vector2 lhs, const double rhs);
-Vector2 operator-(Vector2 lhs, const double rhs);
-Vector2 operator*(Vector2 lhs, const double rhs);
-Vector2 operator/(Vector2 lhs, const double rhs);
-Vector2 operator+(const double lhs, Vector2 rhs);
-Vector2 operator-(const double lhs, Vector2 rhs);
-Vector2 operator*(const double lhs, Vector2 rhs);
-Vector2 operator/(const double lhs, Vector2 rhs);
-Vector2 operator+(Vector2 lhs, const Vector2 rhs);
-Vector2 operator-(Vector2 lhs, const Vector2 rhs);
-bool operator==(const Vector2 lhs, const Vector2 rhs);
-bool operator!=(const Vector2 lhs, const Vector2 rhs);
+inline Vector2 operator-(Vector2 rhs);
+inline Vector2 operator+(Vector2 lhs, const double rhs);
+inline Vector2 operator-(Vector2 lhs, const double rhs);
+inline Vector2 operator*(Vector2 lhs, const double rhs);
+inline Vector2 operator/(Vector2 lhs, const double rhs);
+inline Vector2 operator+(const double lhs, Vector2 rhs);
+inline Vector2 operator-(const double lhs, Vector2 rhs);
+inline Vector2 operator*(const double lhs, Vector2 rhs);
+inline Vector2 operator/(const double lhs, Vector2 rhs);
+inline Vector2 operator+(Vector2 lhs, const Vector2 rhs);
+inline Vector2 operator-(Vector2 lhs, const Vector2 rhs);
+inline bool operator==(const Vector2 lhs, const Vector2 rhs);
+inline bool operator!=(const Vector2 lhs, const Vector2 rhs);
 
 
 
