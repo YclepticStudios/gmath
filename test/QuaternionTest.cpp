@@ -217,6 +217,31 @@ TEST_CASE("Quaternion times Quaternion", "[Quaternion]")
     CHECK(q.W == Approx(0));
 }
 
+TEST_CASE("Quaternion times Vector3", "[Quaternion]")
+{
+    // Case 1
+    Quaternion q = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    Vector3 v = Vector3(0.3535534, -0.1464466, 0.3535534);
+    Vector3 r = q * v;
+    CHECK(r.X == Approx(-0.487732));
+    CHECK(r.Y == Approx(0.1646256));
+    CHECK(r.Z == Approx(0.08039001));
+    // Case 2
+    q = Quaternion(0.336838, 0.0115086, 0.421048, 0.842096);
+    v = Vector3(0.53, -0.0532, 0.22);
+    r = q * v;
+    CHECK(r.X == Approx(0.4459215));
+    CHECK(r.Y == Approx(0.2350067));
+    CHECK(r.Z == Approx(0.2793851));
+    // Case 3
+    q = Quaternion(0, 0.7071068, 0, 0.7071068);
+    v = Vector3(13, -1.23, 3.4);
+    r = q * v;
+    CHECK(r.X == Approx(3.4));
+    CHECK(r.Y == Approx(-1.23));
+    CHECK(r.Z == Approx(-13));
+}
+
 TEST_CASE("Quaternion equality", "[Quaternion]")
 {
     // Case 1
@@ -366,6 +391,50 @@ TEST_CASE("Quaternion from euler angles", "[Quaternion]")
     CHECK(q.Y == Approx(0.4874545));
     CHECK(q.Z == Approx(0.8652994));
     CHECK(q.W == Approx(0.009090029));
+}
+
+TEST_CASE("Quaternion from to rotation", "[Quaternion]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(0.8, 1.4, 2.6);
+    Vector3 v2 = Vector3(1.2, 0.3, -2.9);
+    Quaternion q = Quaternion::FromToRotation(v1, v2);
+    CHECK(q.X == Approx(-0.590233));
+    CHECK(q.Y == Approx(0.6634023));
+    CHECK(q.Z == Approx(-0.1756065));
+    CHECK(q.W == Approx(0.4250704));
+    // Case 2
+    v1 = Vector3(0, 1, 0);
+    v2 = Vector3(0, 0, 1);
+    q = Quaternion::FromToRotation(v1, v2);
+    CHECK(q.X == Approx(0.7071068));
+    CHECK(q.Y == Approx(0));
+    CHECK(q.Z == Approx(0));
+    CHECK(q.W == Approx(0.7071068));
+    // Case 2
+    v1 = Vector3(-1, 0.4, 2.9);
+    v2 = Vector3(0.8, 1.4, 2.6);
+    q = Quaternion::FromToRotation(v1, v2);
+    CHECK(q.X == Approx(-0.1695316));
+    CHECK(q.Y == Approx(0.2761906));
+    CHECK(q.Z == Approx(-0.09655445));
+    CHECK(q.W == Approx(0.9410924));
+    // Case 3 (same vectors)
+    v1 = Vector3(0.8, -1.4, 2.6);
+    v2 = Vector3(0.8, -1.4, 2.6);
+    q = Quaternion::FromToRotation(v1, v2);
+    CHECK(q.X == Approx(0));
+    CHECK(q.Y == Approx(0));
+    CHECK(q.Z == Approx(0));
+    CHECK(q.W == Approx(1));
+    // Case 4 (opposite vectors)
+    v1 = Vector3(-0.8, 1.4, -2.6);
+    v2 = Vector3(0.8, -1.4, 2.6);
+    q = Quaternion::FromToRotation(v1, v2);
+    Vector3 v3 = q * v1;
+    CHECK(v3.X == Approx(0.8));
+    CHECK(v3.Y == Approx(-1.4));
+    CHECK(v3.Z == Approx(2.6));
 }
 
 TEST_CASE("Quaternion inverse", "[Quaternion]")
