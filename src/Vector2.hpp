@@ -49,23 +49,23 @@ struct Vector2
 
 
     /**
-     * Static constants.
-     */
-    static const Vector2 Zero;
-    static const Vector2 One;
-    static const Vector2 Right;
-    static const Vector2 Left;
-    static const Vector2 Up;
-    static const Vector2 Down;
-
-
-    /**
      * Constructors.
      */
     Vector2();
     Vector2(double data[]);
     Vector2(double value);
     Vector2(double x, double y);
+
+
+    /**
+     * Constants for common vectors.
+     */
+    static inline Vector2 Zero();
+    static inline Vector2 One();
+    static inline Vector2 Right();
+    static inline Vector2 Left();
+    static inline Vector2 Up();
+    static inline Vector2 Down();
 
 
     /**
@@ -280,12 +280,12 @@ struct Vector2
     /**
      * Operator overloading.
      */
-    struct Vector2& operator+=(const double& rhs);
-    struct Vector2& operator-=(const double& rhs);
-    struct Vector2& operator*=(const double& rhs);
-    struct Vector2& operator/=(const double& rhs);
-    struct Vector2& operator+=(const Vector2& rhs);
-    struct Vector2& operator-=(const Vector2& rhs);
+    struct Vector2& operator+=(const double rhs);
+    struct Vector2& operator-=(const double rhs);
+    struct Vector2& operator*=(const double rhs);
+    struct Vector2& operator/=(const double rhs);
+    struct Vector2& operator+=(const Vector2 rhs);
+    struct Vector2& operator-=(const Vector2 rhs);
 };
 
 Vector2 operator-(Vector2 rhs);
@@ -297,10 +297,10 @@ Vector2 operator+(const double lhs, Vector2 rhs);
 Vector2 operator-(const double lhs, Vector2 rhs);
 Vector2 operator*(const double lhs, Vector2 rhs);
 Vector2 operator/(const double lhs, Vector2 rhs);
-Vector2 operator+(Vector2 lhs, const Vector2 &rhs);
-Vector2 operator-(Vector2 lhs, const Vector2 &rhs);
-bool operator==(const Vector2 &lhs, const Vector2 &rhs);
-bool operator!=(const Vector2 &lhs, const Vector2 &rhs);
+Vector2 operator+(Vector2 lhs, const Vector2 rhs);
+Vector2 operator-(Vector2 lhs, const Vector2 rhs);
+bool operator==(const Vector2 lhs, const Vector2 rhs);
+bool operator!=(const Vector2 lhs, const Vector2 rhs);
 
 
 
@@ -308,18 +308,18 @@ bool operator!=(const Vector2 &lhs, const Vector2 &rhs);
  * Implementation
  */
 
-const Vector2 Vector2::Zero = Vector2(0, 0);
-const Vector2 Vector2::One = Vector2(1, 1);
-const Vector2 Vector2::Right = Vector2(1, 0);
-const Vector2 Vector2::Left = Vector2(-1, 0);
-const Vector2 Vector2::Up = Vector2(0, 1);
-const Vector2 Vector2::Down = Vector2(0, -1);
-
-
 Vector2::Vector2() : X(0), Y(0) {}
 Vector2::Vector2(double data[]) : X(data[0]), Y(data[1]) {}
 Vector2::Vector2(double value) : X(value), Y(value) {}
 Vector2::Vector2(double x, double y) : X(x), Y(y) {}
+
+
+Vector2 Vector2::Zero() { return Vector2(0, 0); }
+Vector2 Vector2::One() { return Vector2(1, 1); }
+Vector2 Vector2::Right() { return Vector2(1, 0); }
+Vector2 Vector2::Left() { return Vector2(-1, 0); }
+Vector2 Vector2::Up() { return Vector2(0, 1); }
+Vector2 Vector2::Down() { return Vector2(0, -1); }
 
 
 double Vector2::Angle(Vector2 a, Vector2 b)
@@ -496,42 +496,42 @@ void Vector2::ToPolar(Vector2 vector, double &rad, double &theta)
 }
 
 
-struct Vector2& Vector2::operator+=(const double &rhs)
+struct Vector2& Vector2::operator+=(const double rhs)
 {
     X += rhs;
     Y += rhs;
     return *this;
 }
 
-struct Vector2& Vector2::operator-=(const double &rhs)
+struct Vector2& Vector2::operator-=(const double rhs)
 {
     X -= rhs;
     Y -= rhs;
     return *this;
 }
 
-struct Vector2& Vector2::operator*=(const double &rhs)
+struct Vector2& Vector2::operator*=(const double rhs)
 {
     X *= rhs;
     Y *= rhs;
     return *this;
 }
 
-struct Vector2& Vector2::operator/=(const double &rhs)
+struct Vector2& Vector2::operator/=(const double rhs)
 {
     X /= rhs;
     Y /= rhs;
     return *this;
 }
 
-struct Vector2& Vector2::operator+=(const Vector2 &rhs)
+struct Vector2& Vector2::operator+=(const Vector2 rhs)
 {
     X += rhs.X;
     Y += rhs.Y;
     return *this;
 }
 
-struct Vector2& Vector2::operator-=(const Vector2 &rhs)
+struct Vector2& Vector2::operator-=(const Vector2 rhs)
 {
     X -= rhs.X;
     Y -= rhs.Y;
@@ -547,15 +547,15 @@ Vector2 operator+(const double lhs, Vector2 rhs) { return rhs += lhs; }
 Vector2 operator-(const double lhs, Vector2 rhs) { return rhs -= lhs; }
 Vector2 operator*(const double lhs, Vector2 rhs) { return rhs *= lhs; }
 Vector2 operator/(const double lhs, Vector2 rhs) { return rhs /= lhs; }
-Vector2 operator+(Vector2 lhs, const Vector2 &rhs) { return lhs += rhs; }
-Vector2 operator-(Vector2 lhs, const Vector2 &rhs) { return lhs -= rhs; }
+Vector2 operator+(Vector2 lhs, const Vector2 rhs) { return lhs += rhs; }
+Vector2 operator-(Vector2 lhs, const Vector2 rhs) { return lhs -= rhs; }
 
-bool operator==(const Vector2 &lhs, const Vector2 &rhs)
+bool operator==(const Vector2 lhs, const Vector2 rhs)
 {
     return lhs.X == rhs.X && lhs.Y == rhs.Y;
 }
 
-bool operator!=(const Vector2 &lhs, const Vector2 &rhs)
+bool operator!=(const Vector2 lhs, const Vector2 rhs)
 {
     return !(lhs == rhs);
 }
