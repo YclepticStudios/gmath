@@ -507,6 +507,22 @@ TEST_CASE("Normalized Vector3", "[Vector3]")
     CHECK(n.Z == Approx(-0.881571));
 }
 
+TEST_CASE("Orthogonal Vector3", "[Vector3]")
+{
+    // Case 1
+    Vector3 v = Vector3(2, -5, 4);
+    Vector3 o = Vector3::Orthogonal(v);
+    CHECK(Vector3::Angle(v, o) == Approx(1.5707963268));
+    // Case 2
+    v = Vector3(0.24, 0.0082, -0.03);
+    o = Vector3::Orthogonal(v);
+    CHECK(Vector3::Angle(v, o) == Approx(1.5707963268));
+    // Case 3
+    v = Vector3(-27, 83, -163);
+    o = Vector3::Orthogonal(v);
+    CHECK(Vector3::Angle(v, o) == Approx(1.5707963268));
+}
+
 TEST_CASE("OrthoNormalize three Vector3s", "[Vector3]")
 {
     // Case 1
