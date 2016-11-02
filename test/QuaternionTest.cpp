@@ -462,6 +462,86 @@ TEST_CASE("Quaternion inverse", "[Quaternion]")
     CHECK(q.W == Approx(0.8535535));
 }
 
+TEST_CASE("Quaternion lerp", "[Quaternion]")
+{
+    // Case 1
+    Quaternion q1 = Quaternion(-27, 83, 32, -153);
+    Quaternion q2 = Quaternion(36, -64, 12, 24);
+    Quaternion q = Quaternion::Lerp(q1, q2, 0.25);
+    CHECK(q.X == Approx(-0.1972026));
+    CHECK(q.Y == Approx(0.5275592));
+    CHECK(q.Z == Approx(0.1415814));
+    CHECK(q.W == Approx(-0.8140929));
+    // Case 2
+    q1 = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::Lerp(q1, q2, 1.38);
+    CHECK(q.X == Approx(0.3919183));
+    CHECK(q.Y == Approx(0.3196269));
+    CHECK(q.Z == Approx(-0.8430416));
+    CHECK(q.W == Approx(-0.1830837));
+    // Case 3
+    q1 = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::Lerp(q1, q2, 0);
+    CHECK(q.X == Approx(0.3535534));
+    CHECK(q.Y == Approx(-0.1464466));
+    CHECK(q.Z == Approx(0.3535534));
+    CHECK(q.W == Approx(0.8535534));
+    // Case 4
+    q1 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q2 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q = Quaternion::Lerp(q1, q2, -0.32);
+    CHECK(q.X == Approx(0));
+    CHECK(q.Y == Approx(0.7071068));
+    CHECK(q.Z == Approx(0));
+    CHECK(q.W == Approx(0.7071068));
+}
+
+TEST_CASE("Quaternion lerp unclamped", "[Quaternion]")
+{
+    // Case 1
+    Quaternion q1 = Quaternion(-27, 83, 32, -153);
+    Quaternion q2 = Quaternion(36, -64, 12, 24);
+    Quaternion q = Quaternion::LerpUnclamped(q1, q2, 0.25);
+    CHECK(q.X == Approx(-0.1972026));
+    CHECK(q.Y == Approx(0.5275592));
+    CHECK(q.Z == Approx(0.1415814));
+    CHECK(q.W == Approx(-0.8140929));
+    // Case 2
+    q1 = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::LerpUnclamped(q1, q2, 1.38);
+    CHECK(q.X == Approx(-0.5227136));
+    CHECK(q.Y == Approx(-0.2983902));
+    CHECK(q.Z == Approx(0.7966512));
+    CHECK(q.W == Approx(-0.05550352));
+    // Case 3
+    q1 = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::LerpUnclamped(q1, q2, 0);
+    CHECK(q.X == Approx(0.3535534));
+    CHECK(q.Y == Approx(-0.1464466));
+    CHECK(q.Z == Approx(0.3535534));
+    CHECK(q.W == Approx(0.8535534));
+    // Case 4
+    q1 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q2 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q = Quaternion::LerpUnclamped(q1, q2, -0.32);
+    CHECK(q.X == Approx(0));
+    CHECK(q.Y == Approx(0.7071068));
+    CHECK(q.Z == Approx(0));
+    CHECK(q.W == Approx(0.7071068));
+    // Case 5
+    q1 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::LerpUnclamped(q1, q2, -1.73);
+    CHECK(q.X == Approx(-0.219588));
+    CHECK(q.Y == Approx(0.4461099));
+    CHECK(q.Z == Approx(0.4723479));
+    CHECK(q.W == Approx(0.7277737));
+}
+
 TEST_CASE("Quaternion norm", "[Quaternion]")
 {
     // Case 1

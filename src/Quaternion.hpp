@@ -190,7 +190,8 @@ struct Quaternion
      * @param toVector: The vector at which to end the rotation.
      * @return: A new quaternion.
      */
-    static inline Quaternion FromToRotation(Vector3 fromVector, Vector3 toVector);
+    static inline Quaternion FromToRotation(Vector3 fromVector,
+        Vector3 toVector);
 
     /**
      * Returns the inverse of a rotation.
@@ -198,6 +199,25 @@ struct Quaternion
      * @return: A new quaternion.
      */
     static inline Quaternion Inverse(Quaternion rotation);
+
+    /**
+     * Interpolates between a and b by t, which is clamped to the range [0-1].
+     * The result is normalized before being returned.
+     * @param a: The starting rotation.
+     * @param b: The ending rotation.
+     * @return: A new quaternion.
+     */
+    static inline Quaternion Lerp(Quaternion a, Quaternion b, double t);
+
+    /**
+     * Interpolates between a and b by t. This normalizes the result when
+     * complete.
+     * @param a: The starting rotation.
+     * @param b: The ending rotation.
+     * @return: A new quaternion.
+     */
+    static inline Quaternion LerpUnclamped(Quaternion a, Quaternion b,
+        double t);
 
     /**
      * Returns the norm of a quaternion.
@@ -339,6 +359,23 @@ Quaternion Quaternion::Inverse(Quaternion rotation)
 {
     double n = Norm(rotation);
     return Conjugate(rotation) / (n * n);
+}
+
+Quaternion Quaternion::Lerp(Quaternion a, Quaternion b, double t)
+{
+    if (t < 0) return Normalized(a);
+    else if (t > 1) return Normalized(b);
+    return LerpUnclamped(a, b, t);
+}
+
+Quaternion Quaternion::LerpUnclamped(Quaternion a, Quaternion b, double t)
+{
+    Quaternion quaternion;
+    if (Dot(a, b) >= 0)
+        quaternion = a * (1 - t) + b * t;
+    else
+        quaternion = a * (1 - t) - b * t;
+    return Normalized(quaternion);
 }
 
 double Quaternion::Norm(Quaternion rotation)
