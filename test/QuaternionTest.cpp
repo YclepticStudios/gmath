@@ -411,7 +411,7 @@ TEST_CASE("Quaternion from to rotation", "[Quaternion]")
     CHECK(q.Y == Approx(0));
     CHECK(q.Z == Approx(0));
     CHECK(q.W == Approx(0.7071068));
-    // Case 2
+    // Case 3
     v1 = Vector3(-1, 0.4, 2.9);
     v2 = Vector3(0.8, 1.4, 2.6);
     q = Quaternion::FromToRotation(v1, v2);
@@ -419,7 +419,7 @@ TEST_CASE("Quaternion from to rotation", "[Quaternion]")
     CHECK(q.Y == Approx(0.2761906));
     CHECK(q.Z == Approx(-0.09655445));
     CHECK(q.W == Approx(0.9410924));
-    // Case 3 (same vectors)
+    // Case 4 (same vectors)
     v1 = Vector3(0.8, -1.4, 2.6);
     v2 = Vector3(0.8, -1.4, 2.6);
     q = Quaternion::FromToRotation(v1, v2);
@@ -427,7 +427,7 @@ TEST_CASE("Quaternion from to rotation", "[Quaternion]")
     CHECK(q.Y == Approx(0));
     CHECK(q.Z == Approx(0));
     CHECK(q.W == Approx(1));
-    // Case 4 (opposite vectors)
+    // Case 5 (opposite vectors)
     v1 = Vector3(-0.8, 1.4, -2.6);
     v2 = Vector3(0.8, -1.4, 2.6);
     q = Quaternion::FromToRotation(v1, v2);
@@ -540,6 +540,33 @@ TEST_CASE("Quaternion lerp unclamped", "[Quaternion]")
     CHECK(q.Y == Approx(0.4461099));
     CHECK(q.Z == Approx(0.4723479));
     CHECK(q.W == Approx(0.7277737));
+}
+
+TEST_CASE("Quaternion look rotation", "[Quaternion]")
+{
+    // Case 1
+    Vector3 v1 = Vector3(0.8, 1.4, 2.6);
+    Vector3 v2 = Vector3(1.2, 0.3, -2.9);
+    Quaternion q = Quaternion::LookRotation(v1, v2);
+    CHECK(q.X == Approx(-0.2733183));
+    CHECK(q.Y == Approx(0.01946313));
+    CHECK(q.Z == Approx(-0.4166334));
+    CHECK(q.W == Approx(0.8667958));
+    // Case 2
+    v1 = Vector3(0, 0, 1);
+    q = Quaternion::LookRotation(v1);
+    CHECK(q.X == Approx(0));
+    CHECK(q.Y == Approx(0));
+    CHECK(q.Z == Approx(0));
+    CHECK(q.W == Approx(1));
+    // Case 3
+    v1 = Vector3(-1, 0.4, 2.9);
+    v2 = Vector3(0.8, 1.4, 2.6);
+    q = Quaternion::LookRotation(v1, v2);
+    CHECK(q.X == Approx(0.02017402));
+    CHECK(q.Y == Approx(-0.1757116));
+    CHECK(q.Z == Approx(-0.467386));
+    CHECK(q.W == Approx(0.8661805));
 }
 
 TEST_CASE("Quaternion norm", "[Quaternion]")

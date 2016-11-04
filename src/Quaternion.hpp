@@ -176,12 +176,20 @@ struct Quaternion
      * Create a new quaternion from the euler angle representation of
      * a rotation. The z, x and y values represent rotations about those
      * axis in that respective order.
+     * @param rotation: The x, y and z rotations.
+     * @return: A new quaternion.
+     */
+    static inline Quaternion FromEuler(Vector3 rotation);
+
+    /**
+     * Create a new quaternion from the euler angle representation of
+     * a rotation. The z, x and y values represent rotations about those
+     * axis in that respective order.
      * @param x: The rotation about the x-axis in radians.
      * @param y: The rotation about the y-axis in radians.
      * @param z: The rotation about the z-axis in radians.
      * @return: A new quaternion.
      */
-    static inline Quaternion FromEuler(Vector3 rotation);
     static inline Quaternion FromEuler(double x, double y, double z);
 
     /**
@@ -219,6 +227,24 @@ struct Quaternion
      */
     static inline Quaternion LerpUnclamped(Quaternion a, Quaternion b,
         double t);
+
+    /**
+     * Creates a rotation with the specified forward direction. This is the
+     * same as calling LookRotation with (0, 1, 0) as the upwards vector.
+     * The output is undefined for parallel vectors.
+     * @param forward: The forward direction to look toward.
+     * @return: A new quaternion.
+     */
+    static inline Quaternion LookRotation(Vector3 forward);
+
+    /**
+     * Creates a rotation with the specified forward and upwards directions.
+     * The output is undefined for parallel vectors.
+     * @param forward: The forward direction to look toward.
+     * @param upwards: The direction to treat as up.
+     * @return: A new quaternion.
+     */
+    static inline Quaternion LookRotation(Vector3 forward, Vector3 upwards);
 
     /**
      * Returns the norm of a quaternion.
@@ -399,6 +425,27 @@ Quaternion Quaternion::LerpUnclamped(Quaternion a, Quaternion b, double t)
     else
         quaternion = a * (1 - t) - b * t;
     return Normalized(quaternion);
+}
+
+Quaternion Quaternion::LookRotation(Vector3 forward)
+{
+    return LookRotation(forward, Vector3(0, 1, 0));
+}
+
+Quaternion Quaternion::LookRotation(Vector3 forward, Vector3 upwards)
+{
+    // Get orthogonal vectors
+    forward = Vector3::Normalized(forward);
+    Vector3 right = Vector3::Normalized(Vector3::Cross(upwards, forward));
+    upwards = Vector3::Cross(forward, right);
+    // Calculate rotation
+	Quaternion quaternion;
+	quaternion.W = sqrt(1.0 + right.X + upwards.Y + forward.Z) * 0.5;
+	float w4Recip = 1.0 / (4.0 * quaternion.W);
+	quaternion.X = (upwards.Z - forward.Y) * w4Recip;
+	quaternion.Y = (forward.X - right.Z) * w4Recip;
+	quaternion.Z = (right.Y - upwards.X) * w4Recip;
+    return quaternion;
 }
 
 double Quaternion::Norm(Quaternion rotation)
