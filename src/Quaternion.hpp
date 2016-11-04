@@ -214,6 +214,7 @@ struct Quaternion
      * complete.
      * @param a: The starting rotation.
      * @param b: The ending rotation.
+     * @param t: The interpolation value.
      * @return: A new quaternion.
      */
     static inline Quaternion LerpUnclamped(Quaternion a, Quaternion b,
@@ -232,6 +233,28 @@ struct Quaternion
      * @return: A new quaternion.
      */
     static inline Quaternion Normalized(Quaternion rotation);
+
+    /**
+     * Returns a new quaternion interpolated between a and b, using spherical
+     * linear interpolation. The variable t is clamped to the range [0-1]. The
+     * resulting quaternion will be normalized.
+     * @param a: The starting rotation.
+     * @param b: The ending rotation.
+     * @param t: The interpolation value.
+     * @return: A new quaternion.
+     */
+    static inline Quaternion Slerp(Quaternion a, Quaternion b, double t);
+
+    /**
+     * Returns a new quaternion interpolated between a and b, using spherical
+     * linear interpolation. The resulting quaternion will be normalized.
+     * @param a: The starting rotation.
+     * @param b: The ending rotation.
+     * @param t: The interpolation value.
+     * @return: A new quaternion.
+     */
+    static inline Quaternion SlerpUnclamped(Quaternion a, Quaternion b,
+        double t);
 
     /**
      * Returns the Euler angle representation of a rotation. The resulting
@@ -389,6 +412,44 @@ double Quaternion::Norm(Quaternion rotation)
 Quaternion Quaternion::Normalized(Quaternion rotation)
 {
     return rotation / Norm(rotation);
+}
+
+Quaternion Quaternion::Slerp(Quaternion a, Quaternion b, double t)
+{
+    if (t < 0) return Normalized(a);
+    else if (t > 1) return Normalized(b);
+    return SlerpUnclamped(a, b, t);
+}
+
+Quaternion Quaternion::SlerpUnclamped(Quaternion a, Quaternion b, double t)
+{
+    double n1;
+    double n2;
+    double n3 = Dot(a, b);
+    bool flag = false;
+    if (n3 < 0)
+    {
+        flag = true;
+        n3 = -n3;
+    }
+    if (n3 > 0.999999)
+    {
+        n2 = 1 - t;
+        n1 = flag ? -t : t;
+    }
+    else
+    {
+        double n4 = acos(n3);
+        double n5 = 1 / sin(n4);
+        n2 = sin((1 - t) * n4) * n5;
+        n1 = flag ? -sin(t * n4) * n5 : sin(t * n4) * n5;
+    }
+    Quaternion quaternion;
+    quaternion.X = (n2 * a.X) + (n1 * b.X);
+    quaternion.Y = (n2 * a.Y) + (n1 * b.Y);
+    quaternion.Z = (n2 * a.Z) + (n1 * b.Z);
+    quaternion.W = (n2 * a.W) + (n1 * b.W);
+    return Normalized(quaternion);
 }
 
 Vector3 Quaternion::ToEuler(Quaternion rotation)
