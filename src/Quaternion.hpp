@@ -142,6 +142,7 @@ struct Quaternion
 
     /**
      * Returns the angle between two quaternions.
+     * The quaternions must be normalized.
      * @param a: The first quaternion.
      * @param b: The second quaternion.
      * @return: A scalar value.
@@ -261,6 +262,18 @@ struct Quaternion
     static inline Quaternion Normalized(Quaternion rotation);
 
     /**
+     * Returns a new Quaternion created by rotating "from" towards "to" by
+     * "maxRadiansDelta". This will not overshoot, and if a negative delta is
+     * applied, it will rotate till completely opposite "to" and then stop.
+     * @param from: The rotation at which to start.
+     * @param to: The rotation at which to end.
+     # @param maxRadiansDelta: The maximum number of radians to rotate.
+     * @return: A new Quaternion.
+     */
+    static inline Quaternion RotateTowards(Quaternion from, Quaternion to,
+        double maxRadiansDelta);
+
+    /**
      * Returns a new quaternion interpolated between a and b, using spherical
      * linear interpolation. The variable t is clamped to the range [0-1]. The
      * resulting quaternion will be normalized.
@@ -338,13 +351,8 @@ Quaternion Quaternion::Identity() { return Quaternion(0, 0, 0, 1); }
 
 double Quaternion::Angle(Quaternion a, Quaternion b)
 {
-    double v = (b * Inverse(a)).W;
-    v = fmax(v, -1.0);
-    v = fmin(v, 1.0);
-    double angle = acos(v) * 2.0;
-    if (angle > M_PI)
-        angle = 2.0 * M_PI - angle;
-    return angle;
+    double dot = Dot(a, b);
+    return acos(fmin(fabs(dot), 1)) * 2;
 }
 
 Quaternion Quaternion::Conjugate(Quaternion rotation)
@@ -441,7 +449,7 @@ Quaternion Quaternion::LookRotation(Vector3 forward, Vector3 upwards)
     // Calculate rotation
 	Quaternion quaternion;
 	quaternion.W = sqrt(1.0 + right.X + upwards.Y + forward.Z) * 0.5;
-	float w4Recip = 1.0 / (4.0 * quaternion.W);
+	double w4Recip = 1.0 / (4.0 * quaternion.W);
 	quaternion.X = (upwards.Z - forward.Y) * w4Recip;
 	quaternion.Y = (forward.X - right.Z) * w4Recip;
 	quaternion.Z = (right.Y - upwards.X) * w4Recip;
@@ -459,6 +467,17 @@ double Quaternion::Norm(Quaternion rotation)
 Quaternion Quaternion::Normalized(Quaternion rotation)
 {
     return rotation / Norm(rotation);
+}
+
+Quaternion Quaternion::RotateTowards(Quaternion from, Quaternion to,
+    double maxRadiansDelta)
+{
+    double angle = Quaternion::Angle(from, to);
+    if (angle == 0)
+        return to;
+    maxRadiansDelta = fmax(maxRadiansDelta, angle - M_PI);
+    double t = fmin(1, maxRadiansDelta / angle);
+    return Quaternion::SlerpUnclamped(from, to, t);
 }
 
 Quaternion Quaternion::Slerp(Quaternion a, Quaternion b, double t)
@@ -501,13 +520,13 @@ Quaternion Quaternion::SlerpUnclamped(Quaternion a, Quaternion b, double t)
 
 Vector3 Quaternion::ToEuler(Quaternion rotation)
 {
-    float sqw = rotation.W * rotation.W;
-    float sqx = rotation.X * rotation.X;
-    float sqy = rotation.Y * rotation.Y;
-    float sqz = rotation.Z * rotation.Z;
+    double sqw = rotation.W * rotation.W;
+    double sqx = rotation.X * rotation.X;
+    double sqy = rotation.Y * rotation.Y;
+    double sqz = rotation.Z * rotation.Z;
     // If normalized is one, otherwise is correction factor
-    float unit = sqx + sqy + sqz + sqw;
-    float test = rotation.X * rotation.W - rotation.Y * rotation.Z;
+    double unit = sqx + sqy + sqz + sqw;
+    double test = rotation.X * rotation.W - rotation.Y * rotation.Z;
     Vector3 v;
     // Singularity at north pole
     if (test > 0.4995f * unit)
@@ -626,7 +645,7 @@ Quaternion operator*(Quaternion lhs, const Quaternion rhs)
 Vector3 operator*(Quaternion lhs, const Vector3 rhs)
 {
     Vector3 u = Vector3(lhs.X, lhs.Y, lhs.Z);
-    float s = lhs.W;
+    double s = lhs.W;
     return u * (Vector3::Dot(u, rhs) * 2)
         + rhs * (s * s - Vector3::Dot(u, u))
         + Vector3::Cross(u, rhs) * (2.0 * s);

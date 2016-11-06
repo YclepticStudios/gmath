@@ -292,6 +292,11 @@ TEST_CASE("Angle between quaternions", "[Quaternion]")
     // Case 4
     a = Quaternion::Angle(q1, q1);
     CHECK(a == Approx(0));
+    // Case 5
+    q1 = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    a = Quaternion::Angle(q1, q2);
+    CHECK(a == Approx(2.399531));
 }
 
 TEST_CASE("Quaternion conjugate", "[Quaternion]")
@@ -610,6 +615,58 @@ TEST_CASE("Quaternion normalized", "[Quaternion]")
     CHECK(q.W == Approx(0.5));
 }
 
+TEST_CASE("Quaternion rotate towards", "[Quaternion]")
+{
+    // Case 1
+    Quaternion q1 = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
+    Quaternion q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    Quaternion q = Quaternion::RotateTowards(q1, q2, 1.38);
+    CHECK(q.X == Approx(-0.08256436));
+    CHECK(q.Y == Approx(-0.2949892));
+    CHECK(q.Z == Approx(0.7609299));
+    CHECK(q.W == Approx(0.5719706));
+    // Case 2
+    q1 = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::RotateTowards(q1, q2, 0);
+    CHECK(q.X == Approx(0.3535534));
+    CHECK(q.Y == Approx(-0.1464466));
+    CHECK(q.Z == Approx(0.3535534));
+    CHECK(q.W == Approx(0.8535534));
+    // Case 3
+    q1 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q2 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q = Quaternion::RotateTowards(q1, q2, -0.32);
+    CHECK(q.X == Approx(0));
+    CHECK(q.Y == Approx(0.7071068));
+    CHECK(q.Z == Approx(0));
+    CHECK(q.W == Approx(0.7071068));
+    // Case 4
+    q1 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::RotateTowards(q1, q2, -0.08);
+    CHECK(q.X == Approx(-0.01574612));
+    CHECK(q.Y == Approx(0.6964425));
+    CHECK(q.Z == Approx(0.03387091));
+    CHECK(q.W == Approx(0.7166399));
+    // Case 5
+    q1 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::RotateTowards(q1, q2, 5);
+    CHECK(q.X == Approx(0.3919183));
+    CHECK(q.Y == Approx(0.3196269));
+    CHECK(q.Z == Approx(-0.8430416));
+    CHECK(q.W == Approx(-0.1830837));
+    // Case 6
+    q1 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::RotateTowards(q1, q2, -5);
+    CHECK(q.X == Approx(-0.03801756));
+    CHECK(q.Y == Approx(0.6794208));
+    CHECK(q.Z == Approx(0.08177823));
+    CHECK(q.W == Approx(0.7281857));
+}
+
 TEST_CASE("Quaternion slerp", "[Quaternion]")
 {
     // Case 1
@@ -688,6 +745,46 @@ TEST_CASE("Quaternion slerp unclamped", "[Quaternion]")
     CHECK(q.Y == Approx(-0.7278052));
     CHECK(q.Z == Approx(0.4722278));
     CHECK(q.W == Approx(-0.4462129));
+    // Case 6
+    q1 = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::SlerpUnclamped(q1, q2, 0.9918604);
+    CHECK(q.X == Approx(-0.3867059));
+    CHECK(q.Y == Approx(-0.3199319));
+    CHECK(q.Z == Approx(0.8435032));
+    CHECK(q.W == Approx(0.1913233));
+    // Case 7
+    q1 = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::SlerpUnclamped(q1, q2, 0);
+    CHECK(q.X == Approx(0.3535534));
+    CHECK(q.Y == Approx(-0.1464466));
+    CHECK(q.Z == Approx(0.3535534));
+    CHECK(q.W == Approx(0.8535534));
+    // Case 8
+    q1 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::SlerpUnclamped(q1, q2, -0.02713529);
+    CHECK(q.X == Approx(-0.01574612));
+    CHECK(q.Y == Approx(0.6964425));
+    CHECK(q.Z == Approx(0.03387091));
+    CHECK(q.W == Approx(0.7166399));
+    // Case 9
+    q1 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::SlerpUnclamped(q1, q2, 1);
+    CHECK(q.X == Approx(0.3919183));
+    CHECK(q.Y == Approx(0.3196269));
+    CHECK(q.Z == Approx(-0.8430416));
+    CHECK(q.W == Approx(-0.1830837));
+    // Case 10
+    q1 = Quaternion(0, 0.7071068, 0, 0.7071068);
+    q2 = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    q = Quaternion::SlerpUnclamped(q1, q2, -0.06560041);
+    CHECK(q.X == Approx(-0.03801756));
+    CHECK(q.Y == Approx(0.6794208));
+    CHECK(q.Z == Approx(0.08177823));
+    CHECK(q.W == Approx(0.7281857));
 }
 
 TEST_CASE("Quaternion to euler angles", "[Quaternion]")
