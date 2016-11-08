@@ -296,6 +296,15 @@ struct Quaternion
         double t);
 
     /**
+     * Outputs the angle axis representation of the provided quaternion.
+     * @param rotation: The input quaternion.
+     * @param angle: The output angle.
+     * @param axis: The output axis.
+     */
+    static inline void ToAngleAxis(Quaternion rotation, double &angle,
+        Vector3 &axis);
+
+    /**
      * Returns the Euler angle representation of a rotation. The resulting
      * vector contains the rotations about the z, x and y axis, in that order.
      * @param rotation: The quaternion to convert.
@@ -516,6 +525,23 @@ Quaternion Quaternion::SlerpUnclamped(Quaternion a, Quaternion b, double t)
     quaternion.Z = (n2 * a.Z) + (n1 * b.Z);
     quaternion.W = (n2 * a.W) + (n1 * b.W);
     return Normalized(quaternion);
+}
+
+void Quaternion::ToAngleAxis(Quaternion rotation, double &angle, Vector3 &axis)
+{
+    if (rotation.W > 1)
+        rotation = Normalized(rotation);
+    angle = 2 * acos(rotation.W);
+    double s = sqrt(1 - rotation.W * rotation.W);
+    if (s < 0.00001) {
+        axis.X = 1;
+        axis.Y = 0;
+        axis.Z = 0;
+    } else {
+        axis.X = rotation.X / s;
+        axis.Y = rotation.Y / s;
+        axis.Z = rotation.Z / s;
+    }
 }
 
 Vector3 Quaternion::ToEuler(Quaternion rotation)

@@ -787,6 +787,33 @@ TEST_CASE("Quaternion slerp unclamped", "[Quaternion]")
     CHECK(q.W == Approx(0.7281857));
 }
 
+TEST_CASE("Quaternion to angle axis", "[Quaternion]")
+{
+    // Case 1
+    Quaternion q = Quaternion(0.6514133, -0.1282655, 0.6116868, 0.430172);
+    double angle;
+    Vector3 axis;
+    Quaternion::ToAngleAxis(q, angle, axis);
+    CHECK(angle == Approx(2.25223));
+    CHECK(axis.X == Approx(0.7215902));
+    CHECK(axis.Y == Approx(-0.1420836));
+    CHECK(axis.Z == Approx(0.6775839));
+    // Case 2
+    q = Quaternion(0, 0, 0, 1);
+    Quaternion::ToAngleAxis(q, angle, axis);
+    CHECK(angle == Approx(0));
+    CHECK(axis.X == Approx(1));
+    CHECK(axis.Y == Approx(0));
+    CHECK(axis.Z == Approx(0));
+    // Case 2
+    q = Quaternion(0.1164578, 0.4874545, 0.8652994, 0.009090029);
+    Quaternion::ToAngleAxis(q, angle, axis);
+    CHECK(angle == Approx(3.12341));
+    CHECK(axis.X == Approx(0.1164626));
+    CHECK(axis.Y == Approx(0.4874747));
+    CHECK(axis.Z == Approx(0.8653352));
+}
+
 TEST_CASE("Quaternion to euler angles", "[Quaternion]")
 {
     // Case 1
