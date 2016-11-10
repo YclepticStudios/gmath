@@ -140,6 +140,7 @@ struct Quaternion
      */
     static inline Quaternion Identity();
 
+
     /**
      * Returns the angle between two quaternions.
      * The quaternions must be normalized.

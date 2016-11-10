@@ -267,7 +267,7 @@ struct Vector3
                                  double maxMagnitudeDelta);
 
     /**
-     * Multiplies two vectors component-wise.
+     * Multiplies two vectors element-wise.
      * @param a: The lhs of the multiplication.
      * @param b: The rhs of the multiplication.
      * @return: A new vector.
