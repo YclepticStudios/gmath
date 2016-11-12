@@ -43,7 +43,8 @@
 #ifdef __has_include
 #   if __has_include("Vector3.hpp")
 #       include "Vector3.hpp"
-#   else
+#   elif !defined(GMATH_VECTOR3)
+        #define GMATH_VECTOR3
         struct Vector3
         {
             union

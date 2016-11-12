@@ -44,7 +44,8 @@
 #ifdef __has_include
 #   if __has_include("Vector3.hpp")
 #       include "Vector3.hpp"
-#   else
+#   elif !defined(GMATH_VECTOR3)
+        #define GMATH_VECTOR3
         struct Vector3
         {
             union
@@ -64,7 +65,48 @@
             inline Vector3(double value) : X(value), Y(value), Z(value) {}
             inline Vector3(double x, double y) : X(x), Y(y), Z(0) {}
             inline Vector3(double x, double y, double z) : X(x), Y(y), Z(z) {}
+
+            static inline Vector3 Cross(Vector3 lhs, Vector3 rhs)
+            {
+                double x = lhs.Y * rhs.Z - lhs.Z * rhs.Y;
+                double y = lhs.Z * rhs.X - lhs.X * rhs.Z;
+                double z = lhs.X * rhs.Y - lhs.Y * rhs.X;
+                return Vector3(x, y, z);
+            }
+
+            static inline double Dot(Vector3 lhs, Vector3 rhs)
+            {
+                return lhs.X * rhs.X + lhs.Y * rhs.Y + lhs.Z * rhs.Z;
+            }
+
+            static inline Vector3 Normalized(Vector3 v)
+            {
+                double mag = sqrt(v.X * v.X + v.Y * v.Y + v.Z * v.Z);
+                return Vector3(v.X / mag, v.Y / mag, v.Z / mag);
+            }
+
+            static inline Vector3 Orthogonal(Vector3 v)
+            {
+                return v.Z < v.X ?
+                    Vector3(v.Y, -v.X, 0) : Vector3(0, -v.Z, v.Y);
+            }
+
+            static inline double SqrMagnitude(Vector3 v)
+            {
+                return v.X * v.X + v.Y * v.Y + v.Z * v.Z;
+            }
         };
+
+
+        inline Vector3 operator+(Vector3 lhs, const Vector3 rhs)
+        {
+            return Vector3(lhs.X + rhs.X, lhs.Y + rhs.Y, lhs.Z + rhs.Z);
+        }
+
+        inline Vector3 operator*(Vector3 lhs, const double rhs)
+        {
+            return Vector3(lhs.X * rhs, lhs.Y * rhs, lhs.Z * rhs);
+        }
 #   endif
 #else
 #   include "Vector3.hpp"
@@ -79,7 +121,8 @@
 #ifdef __has_include
 #   if __has_include("Quaternion.hpp")
 #       include "Quaternion.hpp"
-#   else
+#   elif !defined(GMATH_QUATERNION)
+        #define GMATH_QUATERNION
         struct Quaternion
         {
             union
