@@ -26,7 +26,7 @@
  *
  *  This file contains test cases for the Matrix3x3 functions.
  *
- *  Created by Eric Phillips on November 8,, 2016.
+ *  Created by Eric Phillips on November 8, 2016.
  */
 
 #include "catch.hpp"
