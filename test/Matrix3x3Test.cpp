@@ -328,3 +328,22 @@ TEST_CASE("Matrix3x3 inverse", "[Matrix3x3]")
         0.002912, 0.0001393, 0.0051451, -0.0123587);
     CHECK_MATRIX(m1, m2);
 }
+
+TEST_CASE("Matrix3x3 is invertible", "[Matrix3x3]")
+{
+    // Case 1
+    Matrix3x3 m = Matrix3x3(2, -5, 3, 7, 1, -6, -9, 4, 8);
+    CHECK(Matrix3x3::IsInvertible(m));
+    // Case 2
+    m = Matrix3x3(0.24, 0.0082, -0.3, 0.6, -1.4, 0.73, 0.38, 0.096, -0.16);
+    CHECK(Matrix3x3::IsInvertible(m));
+    // Case 3
+    m = Matrix3x3(-27, 83, 32, -153, 53, 83, -64, 23, -46);
+    CHECK(Matrix3x3::IsInvertible(m));
+    // Case 4
+    m = Matrix3x3(2, 2, 3, 6, 6, 9, 1, 4, 8);
+    CHECK_FALSE(Matrix3x3::IsInvertible(m));
+    // Case 5
+    m = Matrix3x3(1, 0, 0, -2, 0, 0, 4, 6, 1);
+    CHECK_FALSE(Matrix3x3::IsInvertible(m));
+}

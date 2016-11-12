@@ -168,11 +168,11 @@ struct Matrix3x3
     static inline Matrix3x3 Inverse(Matrix3x3 matrix);
 
     /**
-     * Returns true if a matrix is invertable.
+     * Returns true if a matrix is invertible.
      * @param matrix: The input matrix.
      * @return: A new matrix.
      */
-    static inline bool IsInvertable(Matrix3x3 matrix);
+    static inline bool IsInvertible(Matrix3x3 matrix);
 
     /**
      * Multiplies two matrices element-wise.
@@ -282,6 +282,11 @@ Matrix3x3 Matrix3x3::Inverse(Matrix3x3 matrix)
     a.D21 = matrix.D20 * matrix.D01 - matrix.D21 * matrix.D00;
     a.D22 = matrix.D11 * matrix.D00 - matrix.D10 * matrix.D01;
     return 1 / Determinate(matrix) * a;
+}
+
+bool Matrix3x3::IsInvertible(Matrix3x3 matrix)
+{
+    return fabs(Determinate(matrix)) > 0.00001;
 }
 
 Matrix3x3 Matrix3x3::Scale(Matrix3x3 a, Matrix3x3 b)
