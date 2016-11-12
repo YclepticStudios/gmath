@@ -260,13 +260,28 @@ Matrix3x3 Matrix3x3::One()
 
 double Matrix3x3::Determinate(Matrix3x3 matrix)
 {
-    double v1 = matrix.D00 * matrix.D11 * matrix.D22 +
-        matrix.D01 * matrix.D12 * matrix.D20 +
-        matrix.D02 * matrix.D10 * matrix.D21;
-    double v2 = matrix.D20 * matrix.D11 * matrix.D02 +
-        matrix.D21 * matrix.D12 * matrix.D00 +
-        matrix.D22 * matrix.D10 * matrix.D01;
-    return v1 - v2;
+    double v1 = matrix.D00 * (matrix.D22 * matrix.D11 -
+        matrix.D21 * matrix.D12);
+    double v2 = matrix.D10 * (matrix.D22 * matrix.D01 -
+        matrix.D21 * matrix.D02);
+    double v3 = matrix.D20 * (matrix.D12 * matrix.D01 -
+        matrix.D11 * matrix.D02);
+    return v1 - v2 + v3;
+}
+
+Matrix3x3 Matrix3x3::Inverse(Matrix3x3 matrix)
+{
+    Matrix3x3 a;
+    a.D00 = matrix.D22 * matrix.D11 - matrix.D21 * matrix.D12;
+    a.D01 = matrix.D21 * matrix.D02 - matrix.D22 * matrix.D01;
+    a.D02 = matrix.D12 * matrix.D01 - matrix.D11 * matrix.D02;
+    a.D10 = matrix.D20 * matrix.D12 - matrix.D22 * matrix.D10;
+    a.D11 = matrix.D22 * matrix.D00 - matrix.D20 * matrix.D02;
+    a.D12 = matrix.D10 * matrix.D02 - matrix.D12 * matrix.D00;
+    a.D20 = matrix.D21 * matrix.D10 - matrix.D20 * matrix.D11;
+    a.D21 = matrix.D20 * matrix.D01 - matrix.D21 * matrix.D00;
+    a.D22 = matrix.D11 * matrix.D00 - matrix.D10 * matrix.D01;
+    return 1 / Determinate(matrix) * a;
 }
 
 Matrix3x3 Matrix3x3::Scale(Matrix3x3 a, Matrix3x3 b)

@@ -306,3 +306,25 @@ TEST_CASE("Matrix3x3 determinate", "[Matrix3x3]")
     v = Matrix3x3::Determinate(m);
     CHECK(v == Approx(-911745));
 }
+
+TEST_CASE("Matrix3x3 inverse", "[Matrix3x3]")
+{
+    // Case 1
+    Matrix3x3 m1 = Matrix3x3(2, -5, 3, 7, 1, -6, -9, 4, 8);
+    m1 = Matrix3x3::Inverse(m1);
+    Matrix3x3 m2 = Matrix3x3(0.172973, 0.2810811, 0.1459459, -0.0108108,
+        0.2324324, 0.1783784, 0.2, 0.2, 0.2);
+    CHECK_MATRIX(m1, m2);
+    // Case 2
+    m1 = Matrix3x3(0.24, 0.0082, -0.3, 0.6, -1.4, 0.73, 0.38, 0.096, -0.16);
+    m1 = Matrix3x3::Inverse(m1);
+    m2 = Matrix3x3(-1.1245106, 0.2008222, 3.0247085, -2.7279903, -0.5523194,
+        2.5950245, -4.3075069, 0.1455610, 2.4906975);
+    CHECK_MATRIX(m1, m2);
+    // Case 3
+    m1 = Matrix3x3(-27, 83, 32, -153, 53, 83, -64, 23, -46);
+    m1 = Matrix3x3::Inverse(m1);
+    m2 = Matrix3x3(0.0047678, -0.0049948, -0.0056957, 0.0135455, -0.0036085,
+        0.002912, 0.0001393, 0.0051451, -0.0123587);
+    CHECK_MATRIX(m1, m2);
+}
