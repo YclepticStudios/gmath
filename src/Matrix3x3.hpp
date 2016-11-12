@@ -251,6 +251,21 @@ Matrix3x3 Matrix3x3::One()
 }
 
 
+Matrix3x3 Matrix3x3::Scale(Matrix3x3 a, Matrix3x3 b)
+{
+    Matrix3x3 m;
+    m.D00 = a.D00 * b.D00;
+    m.D01 = a.D01 * b.D01;
+    m.D02 = a.D02 * b.D02;
+    m.D10 = a.D10 * b.D10;
+    m.D11 = a.D11 * b.D11;
+    m.D12 = a.D12 * b.D12;
+    m.D20 = a.D20 * b.D20;
+    m.D21 = a.D21 * b.D21;
+    m.D22 = a.D22 * b.D22;
+    return m;
+}
+
 Matrix3x3 Matrix3x3::Transpose(Matrix3x3 matrix)
 {
     double tmp;

@@ -267,3 +267,26 @@ TEST_CASE("Matrix3x3 transpose", "[Matrix3x3]")
     m2 = Matrix3x3(-27, -153, -64, 83, 53, 23, 32, 83, -46);
     CHECK_MATRIX(m1, m2);
 }
+
+TEST_CASE("Matrix3x3 scale", "[Matrix3x3]")
+{
+    // Case 1
+    Matrix3x3 m1 = Matrix3x3(2, -5, 3, 7, 1, -6, -9, 4, 8);
+    Matrix3x3 m2 = Matrix3x3(-14, 96, 45, -140, 66, 96, -51, 36, -33);
+    Matrix3x3 m3 = Matrix3x3::Scale(m1, m2);
+    Matrix3x3 m4 = Matrix3x3(-28, -480, 135, -980, 66, -576, 459, 144, -264);
+    CHECK_MATRIX(m3, m4);
+    // Case 2
+    m1 = Matrix3x3(0.24, 0.0082, -0.3, 0.6, -1.4, 0.73, 0.38, 0.096, -0.16);
+    m2 = Matrix3x3(1.7, 0.003, -5.6, 0.44, 0.2082, -0.1, 0.8, -1.2, 0.93);
+    m3 = Matrix3x3::Scale(m1, m2);
+    m4 = Matrix3x3(0.408, 0.0000246, 1.68, 0.264, -0.29148, -0.073, 0.304,
+        -0.1152, -0.1488);
+    CHECK_MATRIX(m3, m4);
+    // Case 3
+    m1 = Matrix3x3(-27, 83, 32, -153, 53, 83, -64, 23, -46);
+    m2 = Matrix3x3(5, -2, 6, 10, 4, -3, -6, 7, 11);
+    m3 = Matrix3x3::Scale(m1, m2);
+    m4 = Matrix3x3(-135, -166, 192, -1530, 212, -249, 384, 161, -506);
+    CHECK_MATRIX(m3, m4);
+}
