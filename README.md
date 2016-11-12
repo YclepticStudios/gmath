@@ -4,7 +4,7 @@ This is a lightweight C++ math library aimed at geometry math problems (Vectors,
 
 ## Code Examples
 
-This example takes a vector and rotates it by a quaternion. The quaternion is created by spherical-linear interpolation between two other quaternions.
+This example takes a vector and rotates it by a quaternion. The quaternion is created by spherical-linear interpolation between two other quaternions. Note that these are just examples, and there are simpler ways to achieve the same result.
 
 ```
 #include "Vector3.hpp"
