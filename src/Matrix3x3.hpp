@@ -147,6 +147,13 @@ struct Matrix3x3
 
 
     /**
+     * Returns the determinate of a matrix.
+     * @param matrix: The input matrix.
+     * @return: A scalar value.
+     */
+    static inline double Determinate(Matrix3x3 matrix);
+
+    /**
      * Converts a quaternion to a rotation matrix.
      * @param rotation: The input quaternion.
      * @return: A new rotation matrix.
@@ -250,6 +257,17 @@ Matrix3x3 Matrix3x3::One()
     return Matrix3x3(1, 1, 1, 1, 1, 1, 1, 1, 1);
 }
 
+
+double Matrix3x3::Determinate(Matrix3x3 matrix)
+{
+    double v1 = matrix.D00 * matrix.D11 * matrix.D22 +
+        matrix.D01 * matrix.D12 * matrix.D20 +
+        matrix.D02 * matrix.D10 * matrix.D21;
+    double v2 = matrix.D20 * matrix.D11 * matrix.D02 +
+        matrix.D21 * matrix.D12 * matrix.D00 +
+        matrix.D22 * matrix.D10 * matrix.D01;
+    return v1 - v2;
+}
 
 Matrix3x3 Matrix3x3::Scale(Matrix3x3 a, Matrix3x3 b)
 {

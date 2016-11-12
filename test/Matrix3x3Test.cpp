@@ -290,3 +290,19 @@ TEST_CASE("Matrix3x3 scale", "[Matrix3x3]")
     m4 = Matrix3x3(-135, -166, 192, -1530, 212, -249, 384, 161, -506);
     CHECK_MATRIX(m3, m4);
 }
+
+TEST_CASE("Matrix3x3 determinate", "[Matrix3x3]")
+{
+    // Case 1
+    Matrix3x3 m = Matrix3x3(2, -5, 3, 7, 1, -6, -9, 4, 8);
+    double v = Matrix3x3::Determinate(m);
+    CHECK(v == Approx(185));
+    // Case 2
+    m = Matrix3x3(0.24, 0.0082, -0.3, 0.6, -1.4, 0.73, 0.38, 0.096, -0.16);
+    v = Matrix3x3::Determinate(m);
+    CHECK(v == Approx(-0.1368773));
+    // Case 3
+    m = Matrix3x3(-27, 83, 32, -153, 53, 83, -64, 23, -46);
+    v = Matrix3x3::Determinate(m);
+    CHECK(v == Approx(-911745));
+}
