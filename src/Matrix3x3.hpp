@@ -269,6 +269,35 @@ double Matrix3x3::Determinate(Matrix3x3 matrix)
     return v1 - v2 + v3;
 }
 
+Matrix3x3 Matrix3x3::FromQuaternion(Quaternion rotation)
+{
+    Matrix3x3 m;
+    double sqw = rotation.W * rotation.W;
+    double sqx = rotation.X * rotation.X;
+    double sqy = rotation.Y * rotation.Y;
+    double sqz = rotation.Z * rotation.Z;
+
+    double invSqr = 1 / (sqx + sqy + sqz + sqw);
+    m.D00 = (sqx - sqy - sqz + sqw) * invSqr;
+    m.D11 = (-sqx + sqy - sqz + sqw) * invSqr;
+    m.D22 = (-sqx - sqy + sqz + sqw) * invSqr;
+
+    double tmp1 = rotation.X * rotation.Y;
+    double tmp2 = rotation.Z * rotation.W;
+    m.D10 = 2.0 * (tmp1 + tmp2) * invSqr;
+    m.D01 = 2.0 * (tmp1 - tmp2) * invSqr;
+
+    tmp1 = rotation.X * rotation.Z;
+    tmp2 = rotation.Y * rotation.W;
+    m.D20 = 2.0 * (tmp1 - tmp2) * invSqr;
+    m.D02 = 2.0 * (tmp1 + tmp2) * invSqr;
+    tmp1 = rotation.Y * rotation.Z;
+    tmp2 = rotation.X * rotation.W;
+    m.D21 = 2.0 * (tmp1 + tmp2) * invSqr;
+    m.D12 = 2.0 * (tmp1 - tmp2) * invSqr;
+    return m;
+}
+
 Matrix3x3 Matrix3x3::Inverse(Matrix3x3 matrix)
 {
     Matrix3x3 a;
@@ -302,6 +331,48 @@ Matrix3x3 Matrix3x3::Scale(Matrix3x3 a, Matrix3x3 b)
     m.D21 = a.D21 * b.D21;
     m.D22 = a.D22 * b.D22;
     return m;
+}
+
+Quaternion Matrix3x3::ToQuaternion(Matrix3x3 rotation)
+{
+    Quaternion q;
+    double trace = rotation.D00 + rotation.D11 + rotation.D22;
+    if (trace > 0)
+    {
+        double s = 0.5 / sqrt(trace + 1);
+        q.W = 0.25 / s;
+        q.X = (rotation.D21 - rotation.D12) * s;
+        q.Y = (rotation.D02 - rotation.D20) * s;
+        q.Z = (rotation.D10 - rotation.D01) * s;
+    }
+    else
+    {
+        if (rotation.D00 > rotation.D11 && rotation.D00 > rotation.D22)
+        {
+            double s = 2 * sqrt(1 + rotation.D00 - rotation.D11 - rotation.D22);
+            q.W = (rotation.D21 - rotation.D12) / s;
+            q.X = 0.25 * s;
+            q.Y = (rotation.D01 + rotation.D10) / s;
+            q.Z = (rotation.D02 + rotation.D20) / s;
+        }
+        else if (rotation.D11 > rotation.D22)
+        {
+            double s = 2 * sqrt(1 + rotation.D11 - rotation.D00 - rotation.D22);
+            q.W = (rotation.D02 - rotation.D20) / s;
+            q.X = (rotation.D01 + rotation.D10) / s;
+            q.Y = 0.25 * s;
+            q.Z = (rotation.D12 + rotation.D21) / s;
+        }
+        else
+        {
+            double s = 2 * sqrt(1 + rotation.D22 - rotation.D00 - rotation.D11);
+            q.W = (rotation.D10 - rotation.D01) / s;
+            q.X = (rotation.D02 + rotation.D20) / s;
+            q.Y = (rotation.D12 + rotation.D21) / s;
+            q.Z = 0.25 * s;
+        }
+    }
+    return q;
 }
 
 Matrix3x3 Matrix3x3::Transpose(Matrix3x3 matrix)

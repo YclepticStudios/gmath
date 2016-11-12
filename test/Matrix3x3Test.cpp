@@ -347,3 +347,65 @@ TEST_CASE("Matrix3x3 is invertible", "[Matrix3x3]")
     m = Matrix3x3(1, 0, 0, -2, 0, 0, 4, 6, 1);
     CHECK_FALSE(Matrix3x3::IsInvertible(m));
 }
+
+TEST_CASE("Matrix3x3 from Quaternion", "[Matrix3x3]")
+{
+    // Case 1
+    Quaternion q = Quaternion(0.3535534, -0.1464466, 0.3535534, 0.8535535);
+    Matrix3x3 m1 = Matrix3x3::FromQuaternion(q);
+    Matrix3x3 m2 = Matrix3x3(0.707107, -0.707107, 0, 0.5, 0.5, -0.707107, 0.5,
+        0.5, 0.707107);
+    CHECK_MATRIX(m1, m2);
+    // Case 2
+    q = Quaternion(0.3919183, 0.3196269, -0.8430416, -0.1830837);
+    m1 = Matrix3x3::FromQuaternion(q);
+    m2 = Matrix3x3(-0.625761, -0.0581591, -0.777844, 0.55923, -0.728638,
+        -0.39541, -0.54377, -0.682425, 0.488477);
+    CHECK_MATRIX(m1, m2);
+    // Case 3
+    q = Quaternion(0, 0.7071068, 0, 0.7071068);
+    m1 = Matrix3x3::FromQuaternion(q);
+    m2 = Matrix3x3(0, 0, 1, 0, 1, 0, -1, 0, 0);
+    CHECK_MATRIX(m1, m2);
+    // Case 4
+    q = Quaternion(-27, 83, 32, -153);
+    m1 = Matrix3x3::FromQuaternion(q);
+    m2 = Matrix3x3(0.506224, 0.165673, -0.846339, -0.445353, 0.890612,
+        -0.0920408, 0.73851, 0.423513, 0.524633);
+    CHECK_MATRIX(m1, m2);
+}
+
+TEST_CASE("Matrix3x3 to Quaternion", "[Matrix3x3]")
+{
+    // Case 1
+    Matrix3x3 m = Matrix3x3(0.707107, -0.707107, 0, 0.5, 0.5, -0.707107, 0.5,
+        0.5, 0.707107);
+    Quaternion q = Matrix3x3::ToQuaternion(m);
+    CHECK(q.X == Approx(0.3535534));
+    CHECK(q.Y == Approx(-0.1464466));
+    CHECK(q.Z == Approx(0.3535534));
+    CHECK(q.W == Approx(0.8535535));
+    // Case 2
+    m = Matrix3x3(-0.625761, -0.0581591, -0.777844, 0.55923, -0.728638,
+        -0.39541, -0.54377, -0.682425, 0.488477);
+    q = Matrix3x3::ToQuaternion(m);
+    CHECK(q.X == Approx(-0.3919183));
+    CHECK(q.Y == Approx(-0.3196269));
+    CHECK(q.Z == Approx(0.8430416));
+    CHECK(q.W == Approx(0.1830837));
+    // Case 3
+    m = Matrix3x3(0, 0, 1, 0, 1, 0, -1, 0, 0);
+    q = Matrix3x3::ToQuaternion(m);
+    CHECK(q.X == Approx(0));
+    CHECK(q.Y == Approx(0.7071068));
+    CHECK(q.Z == Approx(0));
+    CHECK(q.W == Approx(0.7071068));
+    // Case 4
+    m = Matrix3x3(0.506224, 0.165673, -0.846339, -0.445353, 0.890612,
+        -0.0920408, 0.73851, 0.423513, 0.524633);
+    q = Matrix3x3::ToQuaternion(m);
+    CHECK(q.X == Approx(0.150814));
+    CHECK(q.Y == Approx(-0.463615));
+    CHECK(q.Z == Approx(-0.178743));
+    CHECK(q.W == Approx(0.854615));
+}
