@@ -405,7 +405,10 @@ Vector2 Vector2::MoveTowards(Vector2 current, Vector2 target,
 
 Vector2 Vector2::Normalized(Vector2 v)
 {
-    return v / Magnitude(v);
+    double mag = Magnitude(v);
+    if (mag == 0)
+        return Vector2::Zero();
+    return v / mag;
 }
 
 void Vector2::OrthoNormalize(Vector2 &normal, Vector2 &tangent)
