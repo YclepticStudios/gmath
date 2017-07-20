@@ -82,7 +82,9 @@
             static inline Vector3 Normalized(Vector3 v)
             {
                 double mag = sqrt(v.X * v.X + v.Y * v.Y + v.Z * v.Z);
-                return Vector3(v.X / mag, v.Y / mag, v.Z / mag);
+                if (mag == 0)
+                    return Vector3::Zero();
+                return v / mag;
             }
 
             static inline Vector3 Orthogonal(Vector3 v)

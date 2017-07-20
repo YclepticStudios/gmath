@@ -457,7 +457,10 @@ Vector3 Vector3::MoveTowards(Vector3 current, Vector3 target,
 
 Vector3 Vector3::Normalized(Vector3 v)
 {
-    return v / Magnitude(v);
+    double mag = Magnitude(v);
+    if (mag == 0)
+        return Vector3::Zero();
+    return v / mag;
 }
 
 Vector3 Vector3::Orthogonal(Vector3 v)

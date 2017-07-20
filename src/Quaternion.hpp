@@ -33,6 +33,9 @@
 #pragma once
 
 #include <math.h>
+#include <iostream>
+
+#define SMALL_DOUBLE 0.0000000001
 
 
 /**
@@ -81,7 +84,9 @@
             static inline Vector3 Normalized(Vector3 v)
             {
                 double mag = sqrt(v.X * v.X + v.Y * v.Y + v.Z * v.Z);
-                return Vector3(v.X / mag, v.Y / mag, v.Z / mag);
+                if (mag == 0)
+                    return Vector3::Zero();
+                return v / mag;
             }
 
             static inline Vector3 Orthogonal(Vector3 v)
@@ -453,17 +458,53 @@ Quaternion Quaternion::LookRotation(Vector3 forward)
 
 Quaternion Quaternion::LookRotation(Vector3 forward, Vector3 upwards)
 {
-    // Get orthogonal vectors
+    // Normalize inputs
     forward = Vector3::Normalized(forward);
+    upwards = Vector3::Normalized(upwards);
+    // Don't allow zero vectors
+    if (Vector3::SqrMagnitude(forward) < SMALL_DOUBLE || Vector3::SqrMagnitude(upwards) < SMALL_DOUBLE)
+        return Quaternion::Identity();
+    // Handle alignment with up direction
+    if (1 - fabs(Vector3::Dot(forward, upwards)) < SMALL_DOUBLE)
+        return FromToRotation(Vector3::Forward(), forward);
+    // Get orthogonal vectors
     Vector3 right = Vector3::Normalized(Vector3::Cross(upwards, forward));
     upwards = Vector3::Cross(forward, right);
     // Calculate rotation
 	Quaternion quaternion;
-	quaternion.W = sqrt(1.0 + right.X + upwards.Y + forward.Z) * 0.5;
-	double w4Recip = 1.0 / (4.0 * quaternion.W);
-	quaternion.X = (upwards.Z - forward.Y) * w4Recip;
-	quaternion.Y = (forward.X - right.Z) * w4Recip;
-	quaternion.Z = (right.Y - upwards.X) * w4Recip;
+    double radicand = right.X + upwards.Y + forward.Z;
+    if (radicand > 0)
+    {
+        quaternion.W = sqrt(1.0 + radicand) * 0.5;
+        double recip = 1.0 / (4.0 * quaternion.W);
+        quaternion.X = (upwards.Z - forward.Y) * recip;
+        quaternion.Y = (forward.X - right.Z) * recip;
+        quaternion.Z = (right.Y - upwards.X) * recip;
+    }
+    else if (right.X >= upwards.Y && right.X >= forward.Z)
+    {
+        quaternion.X = sqrt(1.0 + right.X - upwards.Y - forward.Z) * 0.5;
+        double recip = 1.0 / (4.0 * quaternion.X);
+        quaternion.W = (upwards.Z - forward.Y) * recip;
+        quaternion.Z = (forward.X + right.Z) * recip;
+        quaternion.Y = (right.Y + upwards.X) * recip;
+    }
+    else if (upwards.Y > forward.Z)
+    {
+        quaternion.Y = sqrt(1.0 - right.X + upwards.Y - forward.Z) * 0.5;
+        double recip = 1.0 / (4.0 * quaternion.Y);
+        quaternion.Z = (upwards.Z + forward.Y) * recip;
+        quaternion.W = (forward.X - right.Z) * recip;
+        quaternion.X = (right.Y + upwards.X) * recip;
+    }
+    else
+    {
+        quaternion.Z = sqrt(1.0 - right.X - upwards.Y + forward.Z) * 0.5;
+        double recip = 1.0 / (4.0 * quaternion.Z);
+        quaternion.Y = (upwards.Z + forward.Y) * recip;
+        quaternion.X = (forward.X + right.Z) * recip;
+        quaternion.W = (right.Y - upwards.X) * recip;
+    }
     return quaternion;
 }
 

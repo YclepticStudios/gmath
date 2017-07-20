@@ -558,13 +558,6 @@ TEST_CASE("Quaternion look rotation", "[Quaternion]")
     CHECK(q.Z == Approx(-0.4166334));
     CHECK(q.W == Approx(0.8667958));
     // Case 2
-    v1 = Vector3(0, 0, 1);
-    q = Quaternion::LookRotation(v1);
-    CHECK(q.X == Approx(0));
-    CHECK(q.Y == Approx(0));
-    CHECK(q.Z == Approx(0));
-    CHECK(q.W == Approx(1));
-    // Case 3
     v1 = Vector3(-1, 0.4, 2.9);
     v2 = Vector3(0.8, 1.4, 2.6);
     q = Quaternion::LookRotation(v1, v2);
@@ -572,6 +565,55 @@ TEST_CASE("Quaternion look rotation", "[Quaternion]")
     CHECK(q.Y == Approx(-0.1757116));
     CHECK(q.Z == Approx(-0.467386));
     CHECK(q.W == Approx(0.8661805));
+    // Case 3
+    v1 = Vector3(0, 0, 0);
+    q = Quaternion::LookRotation(v1);
+    CHECK(q.X == Approx(0));
+    CHECK(q.Y == Approx(0));
+    CHECK(q.Z == Approx(0));
+    CHECK(q.W == Approx(1));
+    // Case 4
+    v1 = Vector3(1, 1, 1);
+    q = Quaternion::LookRotation(v1, Vector3(1, 1, 1));
+    CHECK(q.X == Approx(-0.3250576));
+    CHECK(q.Y == Approx(0.3250576));
+    CHECK(q.Z == Approx(0));
+    CHECK(q.W == Approx(0.8880739));
+    // Case 5
+    v1 = Vector3(1, 1, 1);
+    q = Quaternion::LookRotation(v1, Vector3(-1, -1, -1));
+    CHECK(q.X == Approx(-0.3250576));
+    CHECK(q.Y == Approx(0.3250576));
+    CHECK(q.Z == Approx(0));
+    CHECK(q.W == Approx(0.8880739));
+    // Case 6
+    v1 = Vector3(-1, 0, 0);
+    q = Quaternion::LookRotation(v1);
+    CHECK(q.X == Approx(0));
+    CHECK(q.Y == Approx(-0.7071068));
+    CHECK(q.Z == Approx(0));
+    CHECK(q.W == Approx(0.7071068));
+    // Case 7
+    v1 = Vector3(0, 0, 1);
+    q = Quaternion::LookRotation(v1, Vector3::Down());
+    CHECK(q.X == Approx(0));
+    CHECK(q.Y == Approx(0));
+    CHECK(q.Z == Approx(1));
+    CHECK(q.W == Approx(0));
+    // Case 8
+    v1 = Vector3(0, 0, -1);
+    q = Quaternion::LookRotation(v1);
+    CHECK(q.X == Approx(0));
+    CHECK(q.Y == Approx(1));
+    CHECK(q.Z == Approx(0));
+    CHECK(q.W == Approx(0));
+    // Case 9
+    v1 = Vector3(0, 0, -1);
+    q = Quaternion::LookRotation(v1, Vector3::Down());
+    CHECK(q.X == Approx(1));
+    CHECK(q.Y == Approx(0));
+    CHECK(q.Z == Approx(0));
+    CHECK(q.W == Approx(0));
 }
 
 TEST_CASE("Quaternion norm", "[Quaternion]")
